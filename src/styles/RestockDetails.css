@@ -1,0 +1,162 @@
+.restock-details {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  /* Removed max-width, width, and margin to fill parent */
+  /* max-width: 600px; */
+  /* width: 90%; */
+  max-height: 80vh;
+  overflow-y: auto;
+  /* Removed margin: auto; */
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 12px;
+}
+
+.label {
+  font-weight: 600;
+  color: #374151;
+  min-width: 120px;
+}
+
+.value {
+  color: #6B7280;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #9CA3AF;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #374151;
+}
+
+.ingredients-section {
+  margin-top: 20px;
+}
+
+.ingredients-table {
+  background: #F9FAFB;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.table-header {
+  background-color: #F3F4F6;
+  display: grid;
+  grid-template-columns: 1fr 110px 90px 130px;
+  gap: 1px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+  padding: 12px;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1fr 110px 90px 130px;
+  gap: 1px;
+  padding: 12px;
+  border-bottom: 1px solid #E5E7EB;
+  font-size: 14px;
+  color: #6B7280;
+  align-items: center;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.col-ingredients {
+  text-align: left;
+  word-break: break-word;
+}
+
+.col-quantity,
+.col-unit,
+.col-price {
+  text-align: center;
+  word-break: break-word;
+}
+
+.total-section {
+  background-color: #F9FAFB;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-label {
+  font-weight: 600;
+  font-size: 16px;
+  color: #374151;
+}
+
+.total-value {
+  font-weight: 700;
+  font-size: 18px;
+  color: #059669;
+}
+
+@media (max-width: 768px) {
+  .restock-details {
+    padding: 20px;
+    width: 95%;
+  }
+  
+  .details-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .close-btn {
+    align-self: flex-end;
+  }
+  
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 80px 60px 100px;
+    font-size: 12px;
+    padding: 8px;
+  }
+  
+  .label {
+    min-width: 100px;
+    font-size: 14px;
+  }
+}

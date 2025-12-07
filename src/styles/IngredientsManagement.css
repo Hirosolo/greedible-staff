@@ -1,0 +1,198 @@
+.ingredients-management {
+  padding: 20px;
+  background-color: #FFFBEB;
+  min-height: calc(100vh - 140px);
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-box {
+  position: relative;
+  max-width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 15px 12px 15px 35px;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: white;
+  z-index: 1;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  font-size: 14px;
+}
+
+.ingredients-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ingredients-table table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.ingredients-table th {
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+  /* Set approximate equal width for each of the 7 columns */
+  width: calc(100% / 7);
+  vertical-align: bottom; /* Align header text to the bottom */
+}
+
+.ingredients-table td {
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #6B7280;
+  vertical-align: top; /* Align cell content to the top */
+}
+
+.table-header {
+  background-color: #F9FAFB;
+  display: grid;
+  grid-template-columns: minmax(50px, 0.5fr) minmax(90px, 1fr) minmax(150px, 2fr) minmax(150px, 2fr) minmax(80px, 1fr) minmax(120px, 1.5fr) minmax(60px, 0.7fr);
+  gap: 1px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+}
+
+.table-header > div {
+  padding: 12px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: minmax(50px, 0.5fr) minmax(90px, 1fr) minmax(150px, 2fr) minmax(150px, 2fr) minmax(80px, 1fr) minmax(120px, 1.5fr) minmax(60px, 0.7fr);
+  gap: 1px;
+  border-bottom: 1px solid #F3F4F6;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-row > div {
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.table-row:hover {
+  background-color: #F9FAFB;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: #6B7280;
+  font-size: 16px;
+  background: white;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .ingredients-management {
+    padding: 15px;
+  }
+  
+  .table-header,
+  .table-row {
+    grid-template-columns: minmax(50px, 0.5fr) minmax(90px, 1fr) minmax(150px, 2fr) minmax(150px, 2fr) minmax(80px, 1fr) minmax(120px, 1.5fr) minmax(60px, 0.7fr);
+    font-size: 12px;
+  }
+  
+  .table-header > div,
+  .table-row > div {
+    padding: 8px 4px;
+    box-sizing: border-box;
+  }
+}
+
+.add-ingredient-btn {
+  background-color: #374151;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-ingredient-btn:hover {
+  background-color: #1F2937;
+  transform: translateY(-1px);
+}
+
+.ingredients-table td button {
+  padding: 5px 10px;
+  margin: 0 2px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.ingredients-table td button:first-child {
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.ingredients-table td button:first-child:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.ingredients-table td button:last-child {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.ingredients-table td button:last-child:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}

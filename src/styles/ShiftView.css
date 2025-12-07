@@ -1,0 +1,242 @@
+/* --- Shift View Calendar/Table Styles --- */
+.shift-view {
+  width: 100%;
+  max-width: 83vw;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px 24px 24px 24px;
+  min-height: 500px;
+}
+
+.shift-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.shift-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.week-navigation {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-btn {
+  background: #eee;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.nav-btn:hover {
+  background: #d1d5db;
+}
+
+.add-shift-btn {
+  background: #2d8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background 0.2s;
+}
+.add-shift-btn:hover {
+  background: #1766c2;
+}
+
+.week-range {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0 10px;
+}
+
+.shift-calendar {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 18px 8px 18px 8px;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: 600;
+  color: #6a994e;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.day-cell {
+  background: #fff;
+  border-radius: 8px;
+  min-height: 110px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 8px 6px 6px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+}
+
+.day-number {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d8cff;
+  margin-bottom: 6px;
+  text-align: right;
+}
+
+.shift-block {
+  background: #e0e7ff;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background 0.18s;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid #b3b8d1;
+}
+.shift-block:hover {
+  background: #c7d2fe;
+}
+.shift-time {
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: #374151;
+}
+.shift-count {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.staff-avatars {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+.staff-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ccc;
+  color: #fff;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border: 1.5px solid #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.staff-avatar.more {
+  background: #6a994e;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.no-shifts {
+  color: #b91c1c;
+  font-size: 0.95rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.loading-message, .error-message {
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 30px 0;
+  color: #b91c1c;
+}
+
+/* --- Create Shift Modal Styles (added) --- */
+.create-shift-modal {
+  min-width: 320px;
+  max-width: 95vw;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 32px 24px 24px 24px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.create-shift-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.create-shift-label {
+  font-size: 1rem;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.create-shift-input {
+  font-size: 1rem;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  margin-top: 2px;
+}
+.create-shift-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+.create-shift-cancel {
+  background: #eee;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.create-shift-cancel:hover {
+  background: #ddd;
+}
+.create-shift-confirm {
+  background: #2d8cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.create-shift-confirm:disabled {
+  background: #b3d1fa;
+  color: #fff;
+  cursor: not-allowed;
+}
+.create-shift-confirm:not(:disabled):hover {
+  background: #1766c2;
+}

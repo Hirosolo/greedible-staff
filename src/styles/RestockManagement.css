@@ -1,0 +1,153 @@
+.restock-management {
+  padding: 20px;
+  background-color: #FFFBEB;
+  min-height: calc(100vh - 140px);
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-box {
+  position: relative;
+  max-width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px 8px 35px;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: white;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  font-size: 14px;
+}
+
+.restock-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.restock-table table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.restock-table th {
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: #374151;
+  width: calc(100% / 4);
+  vertical-align: middle;
+}
+
+.restock-table th:last-child {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.restock-table td {
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #6B7280;
+  vertical-align: middle;
+}
+
+/* Center the View Details button in the last column */
+.restock-table td:last-child {
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  padding: 12px;
+}
+
+.restock-table .table-header, 
+.restock-table .table-row {
+  display: table-row;
+  gap: 0;
+}
+
+.col-supplier {
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+.view-details-btn {
+  background-color: #F59E0B;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  margin: 0 auto; /* Additional centering for the button itself */
+}
+
+.view-details-btn:hover {
+  background-color: #D97706;
+  transform: scale(1.1);
+}
+
+.table-row:hover {
+  background-color: #F9FAFB;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: #6B7280;
+  font-size: 16px;
+  background: white;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .restock-management {
+    padding: 15px;
+  }
+  
+  .restock-table th,
+  .restock-table td {
+    width: calc(100% / 4);
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  
+  .table-header,
+  .table-row {
+    grid-template-columns: unset;
+    display: table-row;
+  }
+  
+  .view-details-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    margin: 0 auto; /* Keep centering on mobile */
+  }
+}

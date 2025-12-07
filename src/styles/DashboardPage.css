@@ -1,0 +1,201 @@
+.dashboard-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #F5F8F9;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-area {
+  margin-top: 60px;
+  background-color: #F5F8F9;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Content Header */
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background-color: #F5F8F9;
+  border-bottom: 1px solid #E5E7EB;
+  position: sticky;
+  top: 60px;
+  z-index: 10;
+  font-weight: 100;
+}
+
+.content-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.content-tab {
+  padding: 12px 24px;
+  background-color: #E5E5E5;
+  border: 1px solid #D1D5DB;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  color: #6B7280;
+}
+
+.content-tab:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.content-tab:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.content-tab.active {
+  background-color: #F59E0B;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+}
+
+.content-tab:hover:not(.active) {
+  background-color: #F3F4F6;
+  color: #374151;
+}
+
+/* Date Section */
+.content-date {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.date-display {
+  font-weight: 500;
+  color: #374151;
+}
+
+.date-picker-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.date-picker {
+  opacity: 0;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.date-icon {
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.date-icon:hover {
+  background-color: #F3F4F6;
+}
+
+.date-text {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+.month-picker,
+.year-picker {
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none; /* Remove default browser styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236B7280%22%20d%3D%22M287%20197.3l-131.7-131.7c-4.7-4.7-12.3-4.7-17%200L5.3%20197.3c-4.7%204.7-4.7%2012.3%200%2017l17%2017c4.7%204.7%2012.3%204.7%2017%200l94.7-94.7L248%20231.3c4.7%204.7%2012.3%204.7%2017%200l17-17c4.7-4.7%204.7-12.3%200-17z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 30px; /* Make space for the custom arrow */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.month-picker:hover,
+.year-picker:hover {
+  border-color: #A0AEC0;
+}
+
+.month-picker:focus,
+.year-picker:focus {
+  outline: none;
+  border-color: #F59E0B;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+/* Tab Content */
+.tab-content {
+  flex: 1;
+  background-color: #F5F8F9;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 60px;
+  }
+  
+  .content-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+  
+  .content-tabs {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .content-tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+  
+  .content-date {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .date-text {
+    display: none;
+  }
+}

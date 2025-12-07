@@ -1,0 +1,413 @@
+.recipe-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #F5F8F9;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-area {
+  margin-top: 60px;
+  padding: 20px 30px;
+  background-color: #F5F8F9;
+  min-height: calc(100vh - 60px);
+}
+
+/* Header Container for Title and Add Recipe Button */
+.recipe-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px; /* Add some space below the header */
+}
+
+/* Header Title */
+.recipe-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  /* Removed margin-bottom */
+  padding-bottom: 0; /* Remove bottom padding */
+  gap: 20px;
+}
+
+.recipe-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0; /* Removed top margin */
+}
+
+.recipe-header-actions {
+  /* Removed margin-left: auto to place it below title */
+  /* Removed margin-bottom to bring subsequent elements higher */
+}
+
+/* Search */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  padding: 12px 40px 12px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 180px;
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  color: #9CA3AF;
+  font-size: 14px;
+}
+
+/* Add Recipe Button */
+.add-recipe-btn {
+  background-color: #374151;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-recipe-btn:hover {
+  background-color: #1F2937;
+  transform: translateY(-1px);
+}
+
+/* Recipe Grid */
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  column-gap: 0;
+  margin-bottom: 40px;
+}
+
+/* Add box-sizing to recipe cards */
+.recipe-grid > * {
+    box-sizing: border-box;
+}
+
+/* No recipes message */
+.no-recipes {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6B7280;
+  font-size: 16px;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Delete Modal */
+.delete-modal {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 12px 0;
+}
+
+.modal-message {
+  color: #6B7280;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cancel-btn {
+  background-color: #F3F4F6;
+  color: #374151;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #E5E7EB;
+}
+
+.delete-confirm-btn {
+  background-color: #EF4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.delete-confirm-btn:hover {
+  background-color: #DC2626;
+}
+
+/* Edit and Add Modal */
+.edit-modal,
+.add-modal {
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 12px;
+  animation: slideIn 0.2s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 60px;
+  }
+  
+  .content-area {
+    padding: 15px 20px;
+  }
+  
+  .recipe-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .recipe-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  
+  .search-input {
+    width: 150px;
+  }
+  
+  .recipe-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  
+  .delete-modal,
+  .edit-modal,
+  .add-modal {
+    width: 95%;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recipe-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recipe-header-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  
+  .search-container {
+    width: 100%;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+}
+
+/* Add Recipe specific styles (if any) */
+
+/* Styles for the Ingredients Section (copied from EditRecipe.css) */
+.ingredients-section {
+  margin-bottom: 30px;
+}
+
+.ingredients-section h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Style for the container of the ingredients table */
+.selected-ingredients-table-container {
+    max-height: 200px; /* Set a max height for scrolling */
+    overflow-y: auto; /* Add scrollbar if content exceeds max height */
+    border: 1px solid #ddd; /* Add a border around the table container */
+    border-radius: 8px;
+    margin-top: 15px; /* Space above the table */
+}
+
+.ingredients-table {
+  width: 100%; /* Make table take full width */
+  border-collapse: collapse; /* Remove space between borders */
+}
+
+.ingredients-table thead {
+    background-color: #f0f0f0; /* Light background for header */
+}
+
+.ingredients-table th,
+.ingredients-table td {
+  padding: 10px; /* Padding inside cells */
+  text-align: left; /* Align text to the left */
+  border-bottom: 1px solid #eee; /* Add bottom border to rows */
+}
+
+.ingredients-table th {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.ingredients-table td {
+    font-size: 14px;
+    color: #555;
+}
+
+.ingredients-table tbody tr:last-child td {
+  border-bottom: none; /* No bottom border for the last row */
+}
+
+.ingredients-table .amount-input {
+    width: 80px; /* Keep amount input width reasonable */
+    padding: 6px 8px; /* Adjust padding */
+    font-size: 13px; /* Adjust font size */
+    border: 1px solid #ccc; /* Add border to amount input */
+    border-radius: 4px; /* Add border radius to amount input */
+}
+
+.ingredients-table .remove-ingredient-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 14px; /* Adjust font size */
+    padding: 0; /* Remove padding */
+    transition: color 0.2s ease;
+}
+
+.ingredients-table .remove-ingredient-btn:hover {
+    color: #c82333;
+}
+
+/* Style for the ingredient search input */
+.ingredients-search {
+    position: relative; /* Add position relative for z-index context */
+    width: 100%; /* Ensure the container takes full width within its parent */
+}
+
+.ingredients-search .ingredient-search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: none; /* Remove default border */
+    border-radius: 8px;
+    background-color: #e9ecef; /* Match background color */
+    font-size: 14px;
+    outline: none;
+    transition: background-color 0.2s;
+}
+
+.ingredients-search .ingredient-search-input:focus {
+    background-color: #dee2e6; /* Match focus background */
+}
+
+/* Style for the ingredient search results list */
+.ingredient-search-results {
+    list-style: none;
+    padding: 0;
+    top: 40px; /* Position 40px from the top of the positioned parent */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-height: 150px; /* Limit height and add scroll */
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute; /* Position relative to search input container */
+    width: 100%; /* Match width of search input */
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+.ingredient-search-results li {
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.ingredient-search-results li:last-child {
+    border-bottom: none;
+}
+
+.ingredient-search-results li:hover {
+    background-color: #f8f9fa;
+}

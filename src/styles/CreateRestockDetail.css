@@ -1,0 +1,255 @@
+.create-restock-detail {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 2500px;
+  min-width: 500px;
+  width: 98%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.form-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.form-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.restock-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-input,
+.form-select {
+  padding: 10px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.form-select {
+  background-color: white;
+  cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.cancel-btn {
+  background-color: #F3F4F6;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #E5E7EB;
+}
+
+.publish-btn {
+  background-color: #F97316;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.publish-btn:hover {
+  background-color: #EA580C;
+}
+
+@media (max-width: 768px) {
+  .create-restock-detail {
+    padding: 20px;
+    width: 95%;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .cancel-btn,
+  .publish-btn {
+    width: 100%;
+  }
+}
+
+/* Container for search input and results */
+.ingredient-search-container {
+  position: relative;
+}
+
+/* Style for the ingredient search results list */
+.ingredient-search-results {
+  position: absolute;
+  top: 100%; /* Position below the input */
+  left: 0;
+  right: 0;
+  z-index: 10; /* Ensure it's above other modal content */
+  background-color: white;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  max-height: 150px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ingredient-search-results li {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.ingredient-search-results li:last-child {
+  border-bottom: none;
+}
+
+.ingredient-search-results li:hover {
+  background-color: #F3F4F6;
+}
+
+.ingredient-search-results li.highlighted {
+  background-color: #e3f2fd;
+}
+
+/* Style for the table of added ingredients within the modal */
+.create-restock-detail table {
+  width: 100%; /* Make table take full width */
+  border-collapse: collapse; /* Remove space between borders */
+  margin-top: 15px; /* Space above the table */
+  border: 1px solid #ddd; /* Add a border around the table */
+  border-radius: 8px;
+  overflow: hidden; /* Ensures border-radius is applied */
+  table-layout: fixed; /* Added to respect column widths */
+}
+
+.create-restock-detail table thead {
+    background-color: #f0f0f0; /* Light background for header */
+}
+
+.create-restock-detail th,
+.create-restock-detail td {
+  padding: 5px; /* Reduced padding inside cells to help fit content */
+  text-align: left; /* Align text to the left */
+  border-bottom: 1px solid #eee; /* Add bottom border to rows */
+  font-size: 14px;
+  overflow: hidden; /* Hide overflowing content */
+  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
+  box-sizing: border-box; /* Ensure padding and border are included in element's total width */
+}
+
+.create-restock-detail th {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Set specific widths for each column - Using auto for Ingredient Name and adjusted fixed px for others */
+.create-restock-detail th:nth-child(1),
+.create-restock-detail td:nth-child(1) { width: auto; } /* Ingredient Name - Auto width */
+.create-restock-detail th:nth-child(2),
+.create-restock-detail td:nth-child(2) { width: 100px; text-align: center; } /* Quantity - Fixed width (adjusted) */
+.create-restock-detail th:nth-child(3),
+.create-restock-detail td:nth-child(3) { width: 80px; text-align: center; } /* Unit - Fixed width (adjusted) */
+.create-restock-detail th:nth-child(4),
+.create-restock-detail td:nth-child(4) { width: 150px; text-align: right; } /* Import Price - Fixed width (adjusted) */
+.create-restock-detail th:nth-child(5),
+.create-restock-detail td:nth-child(5) { width: 100px; text-align: center; } /* Actions - Fixed width (adjusted) */
+
+.create-restock-detail td {
+    color: #555;
+}
+
+.create-restock-detail table tbody tr:last-child td {
+  border-bottom: none; /* No bottom border for the last row */
+}
+
+/* Style for input fields within the table cells */
+.create-restock-detail td input[type="number"] {
+  width: 100%; /* Make inputs fill the cell width */
+  box-sizing: border-box; /* Include padding in width */
+  padding: 6px 8px; /* Adjust padding */
+  border: 1px solid #D1D5DB; /* Add border to input */
+  border-radius: 4px; /* Add border radius to input */
+  font-size: 13px; /* Adjust font size */
+  text-align: center; /* Center text in input */
+}
+
+/* Specific width for the Import Price input */
+.create-restock-detail td input.price-input {
+    width: 120px; /* Adjusted fixed width for import price input (shorter by 10px) */
+}
+
+.create-restock-detail td button {
+  background: none;
+  border: none;
+  color: #dc3545; /* Red color for remove button */
+  cursor: pointer;
+  font-size: 14px; /* Adjust font size */
+  padding: 0; /* Remove padding */
+  transition: color 0.2s ease;
+  font-weight: 500; /* Make text slightly bolder */
+}
+
+.create-restock-detail td button:hover {
+  color: #c82333;
+  text-decoration: underline; /* Add underline on hover */
+}

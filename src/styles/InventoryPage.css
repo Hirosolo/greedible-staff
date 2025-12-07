@@ -1,0 +1,210 @@
+.inventory-page {
+ display: flex;
+ min-height: 100vh;
+ background-color: #F5F8F9;
+}
+
+.main-content {
+ flex: 1;
+ margin-left: 200px;
+ display: flex;
+ flex-direction: column;
+}
+
+.content-area {
+ margin-top: 60px;
+ background-color: #F5F8F9;
+ min-height: calc(100vh - 60px);
+ display: flex;
+ flex-direction: column;
+}
+
+/* Fixed Tab Bar */
+.inventory-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 20px 30px;
+ background-color: #F5F8F9;
+ border-bottom: 1px solid #E5E7EB;
+ position: sticky;
+ top: 60px;
+ z-index: 10;
+}
+
+.inventory-tabs {
+ display: flex;
+ gap: 0;
+}
+
+.inventory-tab {
+ padding: 12px 24px;
+ background-color: #E5E5E5;
+ border: 1px solid #D1D5DB;
+ cursor: pointer;
+ font-weight: 500;
+ font-size: 14px;
+ transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+ color: #6B7280;
+ white-space: nowrap;
+}
+
+.inventory-tab:first-child {
+ border-radius: 8px 0 0 8px;
+}
+
+.inventory-tab:last-child {
+ border-radius: 0 8px 8px 0;
+}
+
+.inventory-tab.active {
+ background-color: #F59E0B;
+ color: white;
+ font-weight: 600;
+ box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+}
+
+.inventory-tab:hover:not(.active) {
+ background-color: #F3F4F6;
+ color: #374151;
+}
+
+.create-restock-btn {
+ background-color: #374151;
+ color: white;
+ border: none;
+ padding: 10px 20px;
+ border-radius: 8px;
+ font-size: 14px;
+ font-weight: 500;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+}
+
+.create-restock-btn:hover {
+ background-color: #1F2937;
+ transform: translateY(-1px);
+}
+
+.add-ingredient-btn {
+  background-color: #374151;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-ingredient-btn:hover {
+  background-color: #1F2937;
+  transform: translateY(-1px);
+}
+
+/* Tab Content */
+.inventory-content {
+ flex: 1;
+ background-color: #F5F8F9;
+ animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+ from {
+   opacity: 0;
+   transform: translateY(10px);
+ }
+ to {
+   opacity: 1;
+   transform: translateY(0);
+ }
+}
+
+/* Modal */
+.modal-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: rgba(0, 0, 0, 0.5);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 1000;
+ animation: modalFadeIn 0.2s ease-out;
+}
+
+.modal-content {
+ animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+ from {
+   opacity: 0;
+   transform: translateY(-20px);
+ }
+ to {
+   opacity: 1;
+   transform: translateY(0);
+ }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+ .main-content {
+   margin-left: 60px;
+ }
+ 
+ .inventory-header {
+   flex-direction: column;
+   gap: 15px;
+   align-items: flex-start;
+   padding: 15px 20px;
+ }
+ 
+ .inventory-tabs {
+   width: 100%;
+   justify-content: center;
+ }
+ 
+ .inventory-tab {
+   flex: 1;
+   text-align: center;
+   padding: 10px 12px;
+   font-size: 12px;
+ }
+ 
+ .create-restock-btn {
+   width: 100%;
+   justify-content: center;
+ }
+}
+
+@media (max-width: 480px) {
+ .inventory-header {
+   padding: 12px 15px;
+ }
+ 
+ .inventory-tab {
+   padding: 8px 10px;
+   font-size: 11px;
+ }
+ 
+ .create-restock-btn {
+   padding: 8px 16px;
+   font-size: 13px;
+ }
+}

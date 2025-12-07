@@ -1,0 +1,352 @@
+/* Import font Bubblegum Sans từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
+/* Áp dụng font Bubblegum Sans cho toàn bộ dashboard */
+.dashboard-container {
+  padding: 20px;
+  background-color: #F8F5E9; 
+  min-height: 100vh;
+  width: 83vw;
+  font-family: 'Bubblegum Sans', sans-serif; 
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.tab {
+  padding: 12px 24px;
+  background-color: #9DC08B; 
+  border: 1px solid #3A7D44; 
+  cursor: pointer;
+  font-weight: 1000;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  color: #3A7D44; 
+}
+
+.tab:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.tab:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.tab.active {
+  background-color: #3A7D44; /* Xanh lá đậm cho tab active */
+  color: #F8F5E9; /* Chữ màu nền nhạt */
+  font-weight: 600;
+}
+
+.tab:hover:not(.active) {
+  background-color: #DF6D14; /* Cam đậm khi hover */
+  color: #F8F5E9; /* Chữ màu nền nhạt */
+}
+
+.dashboard-date {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #9DC08B; /* Xanh lá nhạt cho ngày tháng */
+  gap: 8px;
+}
+
+.date-icon {
+  font-size: 14px;
+  color: #3A7D44; /* Xanh lá đậm cho icon ngày */
+}
+
+/* Main Content */
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: calc(100vh - 120px); /* Ensure content takes available height */
+}
+
+.dashboard-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+.dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+/* Cards */
+.dashboard-card {
+  background-color: #9DC08B; /* Xanh lá nhạt cho card */
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  min-height: 300px; /* Minimum height for cards */
+}
+
+.card-header {
+  margin-bottom: 15px;
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.card-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #3A7D44; /* Xanh lá đậm cho tiêu đề card */
+  margin: 0;
+}
+
+.card-content {
+  flex: 1; /* Take remaining space */
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Allow content to shrink */
+}
+
+/* Sale Card */
+.sale-card {
+  flex: 1; /* Take equal space in left column */
+  min-height: 400px;
+}
+
+.daily-sales-chart-area {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  min-height: 300px; /* Minimum height for chart visibility */
+}
+
+.daily-sales-chart-area canvas {
+  max-height: 100% !important;
+  width: 100% !important;
+}
+
+/* Daily Revenue Chart Area */
+.daily-revenue-chart-area {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  min-height: 300px; /* Minimum height for chart visibility */
+}
+
+.daily-revenue-chart-area canvas {
+  max-height: 100% !important;
+  width: 100% !important;
+}
+
+/* Daily Import Chart Area */
+.daily-import-chart-area {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  min-height: 300px; /* Minimum height for chart visibility */
+}
+
+.daily-import-chart-area canvas {
+  max-height: 100% !important;
+  width: 100% !important;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #3A7D44; /* Xanh lá đậm cho giá trị metric */
+  margin-bottom: 5px;
+}
+
+.metric-label {
+  font-size: 14px;
+  color: #DF6D14; /* Cam đậm cho nhãn metric */
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  background-color: #F8F5E9; /* Màu nền nhạt cho chart */
+  border-radius: 8px;
+  padding: 15px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9DC08B; /* Xanh lá nhạt cho tiêu đề chart */
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.chart-subtitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  color: #DF6D14; /* Cam đậm cho phụ đề chart */
+  margin-bottom: 15px;
+}
+
+.line-chart,
+.dual-line-chart {
+  position: relative;
+  height: 100%;
+  flex: 1;
+}
+
+.chart-svg {
+  width: 100%;
+  height: 80px;
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #9DC08B; /* Xanh lá nhạt cho nhãn chart */
+  margin-top: 10px;
+}
+
+/* Salaries Card */
+.salaries-card {
+  flex: 1; /* Take equal space in left column */
+  min-height: 300px;
+}
+
+.salaries-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+  height: auto;
+}
+
+.salaries-table th,
+.salaries-table td {
+  border: 1px solid #3A7D44; /* Dark green border */
+  padding: 10px;
+  text-align: left;
+}
+
+.salaries-table th {
+  background-color: #3A7D44; /* Dark green background for header */
+  color: #F8F5E9; /* Light text color */
+  font-weight: 600;
+}
+
+.salaries-table tbody tr:nth-child(even) {
+  background-color: #F8F5E9; /* Light background for even rows */
+}
+
+.salaries-table tbody tr:hover {
+  background-color: #DF6D14; /* Amber background on hover */
+  color: #F8F5E9; /* Light text color on hover */
+}
+
+/* Import Price Card */
+.import-card {
+  flex: 1; /* Take equal space in right column */
+  min-height: 350px;
+}
+
+/* Revenue Card */
+.revenue-card {
+  flex: 1; /* Take equal space in right column */
+  min-height: 350px;
+}
+
+.revenue-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #3A7D44; /* Xanh lá đậm cho giá trị revenue */
+  margin-bottom: 5px;
+}
+
+/* Chart.js specific overrides */
+.dashboard-card canvas {
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* Ensure charts are responsive and visible */
+.daily-sales-chart-area > div,
+.daily-revenue-chart-area > div,
+.daily-import-chart-area > div {
+  position: relative !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* No data message styling */
+.dashboard-card p {
+  color: #3A7D44;
+  text-align: center;
+  font-size: 14px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-content {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .dashboard-left,
+  .dashboard-right {
+    height: auto;
+  }
+
+  .dashboard-card {
+    min-height: 250px;
+  }
+
+  .daily-sales-chart-area,
+  .daily-revenue-chart-area,
+  .daily-import-chart-area {
+    min-height: 200px;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .dashboard-date {
+    font-size: 11px;
+  }
+
+  .tab {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+
+  .salaries-table {
+    font-size: 12px;
+  }
+
+  .salaries-table th,
+  .salaries-table td {
+    padding: 8px;
+  }
+}
