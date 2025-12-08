@@ -41,7 +41,7 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
           const fetchPromises = ingredients.map(async (ingredient) => {
               try {
                   // Fetch restock details for this ingredient, ordered by date DESC
-                  const response = await fetch(`https://greedible-backend.vercel.app/api/ingredients/${ingredient.ingredient_id}/restocks`, {
+                  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/${ingredient.ingredient_id}/restocks`, {
                       headers: {
                           'Authorization': `Bearer ${token}`,
                       },

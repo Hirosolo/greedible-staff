@@ -263,7 +263,7 @@ const EditRecipe = ({ recipe, onSave, onCancel }) => {
     };
 
     try {
-      const response = await fetch(`https://greedible-backend.vercel.app/api/recipes/${recipeId}`, {
+      const response = await fetch(`https://greedible-backend-staff.vercel.app/api/recipes/${recipeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -323,7 +323,7 @@ const EditRecipe = ({ recipe, onSave, onCancel }) => {
           >
             {selectedImage ? (
               <img
-                src={`https://greedible-backend.vercel.app${selectedImage}`}
+                src={`https://greedible-backend-staff.vercel.app${selectedImage}`}
                 alt={title}
                 className="recipe-image"
                 onError={(e) => {

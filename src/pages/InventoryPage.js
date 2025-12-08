@@ -79,7 +79,7 @@ const InventoryPage = () => {
     console.log('Save restock:', formData);
     // Logic to save restock
     try {
-      const response = await fetch('https://greedible-backend.vercel.app/api/restocks', {
+      const response = await fetch('https://greedible-backend-staff.vercel.app/api/restock', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -35,7 +35,12 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
       const loadSuppliers = async () => {
         try {
           const data = await fetchSuppliers();
-          setSuppliers(data);
+          // Ensure data is an array
+          if (Array.isArray(data)) {
+            setSuppliers(data);
+          } else {
+            console.error('Suppliers data is not an array:', data);
+          }
         } catch (err) {
           console.error('Error fetching suppliers:', err);
           // Handle error appropriately
@@ -140,7 +145,7 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
                 onChange={handleChange}
              >
                 <option value="">Select Supplier</option>
-                {suppliers.map(supplier => (
+                {Array.isArray(suppliers) && suppliers.map(supplier => (
                   <option key={supplier.supplier_id} value={supplier.supplier_id}>
                     {supplier.supplier_name}
                   </option>

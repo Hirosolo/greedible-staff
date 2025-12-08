@@ -15,7 +15,7 @@ const StaffManagement = () => {
         }
 
         console.log('Fetching staff data...');
-        const response = await fetch('https://greedible-backend.vercel.app/api/staff/all', {
+        const response = await fetch('https://greedible-backend-staff.vercel.app/api/staff/all', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

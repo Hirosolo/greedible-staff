@@ -8,7 +8,7 @@ const Ingredients = ({ onTabChange, selectedMonth, selectedYear, wasteData, isLo
 
   // State to hold restock details for each ingredient, keyed by ingredient_id
   const [ingredientRestockDetails, setIngredientRestockDetails] = useState({});
-  const [loadingRestockDetails, setLoadingRestockDetails] = useState({});
+  const [loadingRestockDetails, setLoadingRestockDetails] = useState(true);
   const [expandedRestockDetails, setExpandedRestockDetails] = useState({}); // State to manage expanded rows
 
   // State for managing the visibility of the "Show All Ingredients" modal
@@ -27,12 +27,12 @@ const Ingredients = ({ onTabChange, selectedMonth, selectedYear, wasteData, isLo
     setShowAllIngredientsModal(false);
   };
 
-  // Fetch restock details for each ingredient when allIngredients data changes
+  // Fetch ALL restock details in a single API call
   useEffect(() => {
-    const fetchAllIngredientsRestockDetails = async () => {
+    const fetchAllRestockDetails = async () => {
       if (!allIngredients || allIngredients.length === 0) {
         setIngredientRestockDetails({});
-        setLoadingRestockDetails({});
+        setLoadingRestockDetails(false);
         return;
       }
 
@@ -40,59 +40,64 @@ const Ingredients = ({ onTabChange, selectedMonth, selectedYear, wasteData, isLo
       if (!token) {
         console.error('No staff authentication token found');
         setIngredientRestockDetails({});
-        setLoadingRestockDetails({});
+        setLoadingRestockDetails(false);
         return;
       }
 
-      const initialLoadingState = {};
-      allIngredients.forEach(ingredient => { initialLoadingState[ingredient.ingredient_id] = true; });
-      setLoadingRestockDetails(initialLoadingState);
+      setLoadingRestockDetails(true);
 
-      const fetchPromises = allIngredients.map(async (ingredient) => {
-        try {
-          const response = await fetch(`https://greedible-backend.vercel.app/api/ingredients/${ingredient.ingredient_id}/restocks`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
+      try {
+        // Call the API without ingredient ID to get all restock details
+        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/restocks`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          console.error('Error fetching all restock details:', response.status);
+          setIngredientRestockDetails({});
+          setLoadingRestockDetails(false);
+          return;
+        }
+
+        const data = await response.json();
+        
+        if (data.success && Array.isArray(data.restockDetails)) {
+          // Group restock details by ingredient_id
+          const groupedRestockDetails = {};
+          
+          data.restockDetails.forEach(restock => {
+            const ingredientId = restock.ingredient_id;
+            
+            if (!groupedRestockDetails[ingredientId]) {
+              groupedRestockDetails[ingredientId] = [];
+            }
+            
+            groupedRestockDetails[ingredientId].push(restock);
           });
 
-          if (!response.ok) {
-            console.error(`Error fetching restock details for ingredient ${ingredient.ingredient_id}:`, response.status);
-            // Return an object with an empty details array on error
-            return { ingredientId: ingredient.ingredient_id, details: [] };
-          } else {
-            const data = await response.json();
-            // Check for both success and if restockDetails is an array
-            if (data.success && Array.isArray(data.restockDetails)) {
-              return { ingredientId: ingredient.ingredient_id, details: data.restockDetails };
-            } else {
-                 console.warn(`Unexpected data format for ingredient ${ingredient.ingredient_id}:`, data);
-                 // Return an object with an empty details array if format is unexpected
-              return { ingredientId: ingredient.ingredient_id, details: [] };
-            }
-          }
-        } catch (error) {
-          console.error(`Error fetching restock details for ingredient ${ingredient.ingredient_id}:`, error);
-          // Return an object with an empty details array on error
-          return { ingredientId: ingredient.ingredient_id, details: [] };
+          // Sort each ingredient's restocks by date (most recent first)
+          Object.keys(groupedRestockDetails).forEach(ingredientId => {
+            groupedRestockDetails[ingredientId].sort((a, b) => 
+              new Date(b.restock_date) - new Date(a.restock_date)
+            );
+          });
+
+          setIngredientRestockDetails(groupedRestockDetails);
+        } else {
+          console.warn('Unexpected data format from restock API:', data);
+          setIngredientRestockDetails({});
         }
-      });
-
-      // Wait for all fetches to complete
-      const results = await Promise.all(fetchPromises);
-
-      const newIngredientRestockDetails = {};
-      const finalLoadingState = {};
-      results.forEach(result => {
-        newIngredientRestockDetails[result.ingredientId] = result.details;
-        finalLoadingState[result.ingredientId] = false;
-      });
-
-      setIngredientRestockDetails(newIngredientRestockDetails);
-      setLoadingRestockDetails(finalLoadingState);
+      } catch (error) {
+        console.error('Error fetching all restock details:', error);
+        setIngredientRestockDetails({});
+      } finally {
+        setLoadingRestockDetails(false);
+      }
     };
 
-    fetchAllIngredientsRestockDetails();
+    fetchAllRestockDetails();
 
   }, [allIngredients]); // Rerun when allIngredients changes
 
@@ -177,7 +182,7 @@ const Ingredients = ({ onTabChange, selectedMonth, selectedYear, wasteData, isLo
         {/* All Ingredients Section - Replacing Most Imported for full list */}
         <div className="ingredients-section">
           <h3 className="section-title">All Ingredients</h3>
-          {isLoadingIngredients || Object.keys(loadingRestockDetails).length === 0 || Object.values(loadingRestockDetails).some(isLoading => isLoading) ? (
+          {isLoadingIngredients || loadingRestockDetails ? (
               <div className="loading">Loading ingredients and restock details...</div>
           ) : allIngredients && allIngredients.length > 0 ? (
               <Fragment> {/* Wrap table and button in Fragment */}

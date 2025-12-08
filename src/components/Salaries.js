@@ -16,7 +16,7 @@ const Salaries = () => {
         const now = new Date();
         const month = now.getMonth() + 1; // JS months are 0-based
         const year = now.getFullYear();
-        const response = await fetch(`https://greedible-backend.vercel.app/api/staff/salary?month=${month}&year=${year}`, {
+        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/staff/salary?month=${month}&year=${year}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         if (!response.ok) throw new Error('Failed to fetch salary data');

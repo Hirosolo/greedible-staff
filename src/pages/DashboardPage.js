@@ -6,7 +6,6 @@ import Revenue from '../components/Revenue';
 import Order from '../components/Order';
 import Ingredients from '../components/Ingredients';
 import '../styles/DashboardPage.css';
-
 const DashboardPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,7 +40,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchDailySales = async () => {
       try {
-        const response = await fetch(`https://greedible-backend.vercel.app/api/sales/daily/${selectedYear}/${selectedMonth}`);
+        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/sales/daily/${selectedYear}/${selectedMonth}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -72,7 +71,7 @@ const DashboardPage = () => {
             throw new Error('No staff authentication token found');
         }
 
-        const response = await fetch(`https://greedible-backend.vercel.app/api/orders/revenue`, {
+        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/orders/revenue`, {
             headers: {
                 'Authorization': `Bearer ${token}` // Include the token in the headers
             }
@@ -128,7 +127,7 @@ const DashboardPage = () => {
         }
 
         // Fetch data from the modified /restocks endpoint with month and year query parameters
-        const response = await fetch(`https://greedible-backend.vercel.app/api/restocks?month=${selectedMonth}&year=${selectedYear}`, {
+        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/restock?month=${selectedMonth}&year=${selectedYear}`, {
             headers: {
                 'Authorization': `Bearer ${token}` // Include the token in the headers
             }
@@ -172,7 +171,7 @@ const DashboardPage = () => {
         // You will need to create a backend endpoint to fetch employee name, role, and pay_rate.
         // The response should be an array of objects like: 
         // [{ name: 'Employee Name', role: 'Role', pay_rate: 50000 }, ...]
-        const response = await fetch(`https://greedible-backend.vercel.app/api/staff/salaries?month=${selectedMonth}&year=${selectedYear}` , {
+        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/staff/salaries?month=${selectedMonth}&year=${selectedYear}` , {
              headers: {
                 'Authorization': `Bearer ${token}` // Include the token in the headers
             }
@@ -212,7 +211,7 @@ const DashboardPage = () => {
               throw new Error('No staff authentication token found');
           }
 
-          const response = await fetch(`https://greedible-backend.vercel.app/api/orders/all`, {
+          const response = await fetch(`https://greedible-backend-staff.vercel.app/api/orders/all`, {
                headers: {
                   'Authorization': `Bearer ${token}` // Include the token in the headers
               }
@@ -255,7 +254,7 @@ const DashboardPage = () => {
               throw new Error('No staff authentication token found');
           }
 
-          const response = await fetch(`https://greedible-backend.vercel.app/api/waste`, {
+          const response = await fetch(`https://greedible-backend-staff.vercel.app/api/waste`, {
                headers: {
                   'Authorization': `Bearer ${token}` // Include the token in the headers
               }
@@ -298,7 +297,7 @@ const DashboardPage = () => {
               throw new Error('No staff authentication token found');
           }
 
-          const response = await fetch(`https://greedible-backend.vercel.app/api/ingredients`, {
+          const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients`, {
                headers: {
                   'Authorization': `Bearer ${token}` // Include the token in the headers
               }

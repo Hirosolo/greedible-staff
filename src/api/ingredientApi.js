@@ -4,7 +4,7 @@ export const fetchIngredients = async () => {
     throw new Error('No staff authentication token found');
   }
   
-  const response = await fetch('https://greedible-backend.vercel.app/api/ingredients', {
+  const response = await fetch('https://greedible-backend-staff.vercel.app/api/ingredients', {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
@@ -28,7 +28,7 @@ export const deleteIngredient = async (ingredientId) => {
      throw new Error('No staff authentication token found');
    }
 
-  const response = await fetch(`https://greedible-backend.vercel.app/api/ingredients/${ingredientId}`, {
+  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/${ingredientId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -50,7 +50,7 @@ export const updateIngredient = async (ingredientId, ingredientData) => {
      throw new Error('No staff authentication token found');
    }
 
-  const response = await fetch(`https://greedible-backend.vercel.app/api/ingredients/${ingredientId}`, {
+  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/${ingredientId}`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const fetchSuppliers = async () => {
       throw new Error('No staff authentication token found');
     }
 
-  const response = await fetch('https://greedible-backend.vercel.app/api/suppliers', {
+  const response = await fetch('https://greedible-backend-staff.vercel.app/api/suppliers', {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
@@ -82,5 +82,15 @@ export const fetchSuppliers = async () => {
   if (!response.ok) {
     throw new Error('Failed to fetch suppliers');
   }
-  return response.json();
+  const data = await response.json();
+  // Handle different response formats: could be { suppliers: [...] } or just [...]
+  if (Array.isArray(data)) {
+    return data;
+  } else if (data.suppliers && Array.isArray(data.suppliers)) {
+    return data.suppliers;
+  } else if (data.success && Array.isArray(data.suppliers)) {
+    return data.suppliers;
+  } else {
+    throw new Error('Unexpected data format from suppliers API');
+  }
 }; 

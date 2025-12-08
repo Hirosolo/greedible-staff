@@ -13,7 +13,7 @@ const formatDate = (date) => {
 
 // API calls for removing and adding staff to shifts
 const removeStaffFromShiftAPI = async (scheduleId, token) => {
-  const response = await fetch(`https://greedible-backend.vercel.app/api/schedules/${scheduleId}`, {
+  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/schedules/${scheduleId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -27,7 +27,7 @@ const removeStaffFromShiftAPI = async (scheduleId, token) => {
 };
 
 const addStaffToShiftAPI = async (shiftData, token) => {
-  const response = await fetch('https://greedible-backend.vercel.app/api/schedules', {
+  const response = await fetch('https://greedible-backend-staff.vercel.app/api/schedules', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const addStaffToShiftAPI = async (shiftData, token) => {
 };
 
 const createShiftAPI = async (shiftData, token) => {
-  const response = await fetch('https://greedible-backend.vercel.app/api/schedules', {
+  const response = await fetch('https://greedible-backend-staff.vercel.app/api/schedules', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const createShiftAPI = async (shiftData, token) => {
 };
 
 const deleteShiftAPI = async (scheduleId, token) => {
-  const response = await fetch(`https://greedible-backend.vercel.app/api/schedules/${scheduleId}`, {
+  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/schedules/${scheduleId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -73,7 +73,7 @@ const deleteShiftAPI = async (scheduleId, token) => {
 };
 
 const fetchAllStaff = async (token) => {
-   const response = await fetch('https://greedible-backend.vercel.app/api/staff/all', {
+   const response = await fetch('https://greedible-backend-staff.vercel.app/api/staff/all', {
      headers: {
        'Authorization': `Bearer ${token}`,
      },
@@ -205,7 +205,7 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
         setIsSaving(false);
         return;
       }
-      const response = await fetch('https://greedible-backend.vercel.app/api/schedules/block', {
+      const response = await fetch('https://greedible-backend-staff.vercel.app/api/schedules/block', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

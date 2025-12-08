@@ -29,7 +29,13 @@ const CreateRestockDetail = ({ onSave, onCancel }) => {
     const loadSuppliers = async () => {
       try {
         const data = await fetchSuppliers();
-        setSuppliers(data);
+        // Ensure data is an array
+        if (Array.isArray(data)) {
+          setSuppliers(data);
+        } else {
+          console.error('Suppliers data is not an array:', data);
+          setErrorSuppliers('Failed to load suppliers: Invalid data format.');
+        }
       } catch (err) {
         console.error('Error fetching suppliers:', err);
         setErrorSuppliers('Failed to load suppliers.');
@@ -228,7 +234,7 @@ const CreateRestockDetail = ({ onSave, onCancel }) => {
               required
             >
               <option value="">Select a supplier</option>
-              {suppliers.map(supplier => (
+              {Array.isArray(suppliers) && suppliers.map(supplier => (
                 <option key={supplier.supplier_id} value={supplier.supplier_id}>
                   {supplier.supplier_name}
                 </option>
