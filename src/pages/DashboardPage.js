@@ -211,7 +211,7 @@ const DashboardPage = () => {
               throw new Error('No staff authentication token found');
           }
 
-          const response = await fetch(`https://greedible-backend-staff.vercel.app/api/orders/all`, {
+          const response = await fetch(`https://greedible-backend-staff.vercel.app/api/orders`, {
                headers: {
                   'Authorization': `Bearer ${token}` // Include the token in the headers
               }

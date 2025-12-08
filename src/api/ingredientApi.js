@@ -83,13 +83,15 @@ export const fetchSuppliers = async () => {
     throw new Error('Failed to fetch suppliers');
   }
   const data = await response.json();
-  // Handle different response formats: could be { suppliers: [...] } or just [...]
+  // Handle different response formats: could be { success: true, data: [...] } or just [...]
   if (Array.isArray(data)) {
     return data;
+  } else if (data.success && Array.isArray(data.data)) {
+    return data.data;
   } else if (data.suppliers && Array.isArray(data.suppliers)) {
     return data.suppliers;
-  } else if (data.success && Array.isArray(data.suppliers)) {
-    return data.suppliers;
+  } else if (data.data && Array.isArray(data.data)) {
+    return data.data;
   } else {
     throw new Error('Unexpected data format from suppliers API');
   }

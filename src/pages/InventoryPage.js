@@ -79,10 +79,16 @@ const InventoryPage = () => {
     console.log('Save restock:', formData);
     // Logic to save restock
     try {
+      const token = localStorage.getItem('staffToken');
+      if (!token) {
+        throw new Error('No staff authentication token found');
+      }
+
       const response = await fetch('https://greedible-backend-staff.vercel.app/api/restock', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });

@@ -1,10 +1,13 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import '../styles/Ingredients.css';
+import { fetchIngredients } from '../api/ingredientApi';
 
-// Accept wasteData, isLoadingWaste, allIngredients, and isLoadingIngredients props
-const Ingredients = ({ onTabChange, selectedMonth, selectedYear, wasteData, isLoadingWaste, allIngredients, isLoadingIngredients }) => {
+// Accept wasteData, isLoadingWaste props (allIngredients and isLoadingIngredients are now fetched internally)
+const Ingredients = ({ onTabChange, selectedMonth, selectedYear, wasteData, isLoadingWaste }) => {
 
-  console.log('All ingredients data received:', allIngredients);
+  // State for ingredients data and loading state
+  const [allIngredients, setAllIngredients] = useState([]);
+  const [isLoadingIngredients, setIsLoadingIngredients] = useState(false);
 
   // State to hold restock details for each ingredient, keyed by ingredient_id
   const [ingredientRestockDetails, setIngredientRestockDetails] = useState({});
@@ -16,6 +19,26 @@ const Ingredients = ({ onTabChange, selectedMonth, selectedYear, wasteData, isLo
 
   // Define the initial number of items to display in the main table
   const initialDisplayCount = 5;
+
+  // Fetch ingredients from API
+  useEffect(() => {
+    const fetchAllIngredients = async () => {
+      setIsLoadingIngredients(true);
+      try {
+        console.log('Fetching all ingredients from API...');
+        const ingredients = await fetchIngredients();
+        console.log('All ingredients data fetched:', ingredients);
+        setAllIngredients(ingredients);
+      } catch (error) {
+        console.error('Error fetching ingredients:', error);
+        setAllIngredients([]);
+      } finally {
+        setIsLoadingIngredients(false);
+      }
+    };
+
+    fetchAllIngredients();
+  }, []); // Fetch on component mount
 
   // Function to open the modal
   const handleShowMoreClick = () => {

@@ -18,8 +18,8 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
   }, []);
 
   useEffect(() => {
-      // Fetch latest restock date for each ingredient after ingredients are loaded
-      const fetchLatestRestockDates = async () => {
+      // Fetch all restock details in a single API call
+      const fetchAllRestockDates = async () => {
           if (!ingredients || ingredients.length === 0) {
               setLatestRestockDates({});
               setLoadingRestockDates({});
@@ -34,52 +34,96 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
               return;
           }
 
+          // Set loading state for all ingredients
           const initialLoadingState = {};
           ingredients.forEach(ingredient => { initialLoadingState[ingredient.ingredient_id] = true; });
           setLoadingRestockDates(initialLoadingState);
 
-          const fetchPromises = ingredients.map(async (ingredient) => {
-              try {
-                  // Fetch restock details for this ingredient, ordered by date DESC
-                  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/${ingredient.ingredient_id}/restocks`, {
-                      headers: {
-                          'Authorization': `Bearer ${token}`,
-                      },
+          try {
+              // Call the API to get all restock details in one call
+              const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/restocks`, {
+                  headers: {
+                      'Authorization': `Bearer ${token}`,
+                  },
+              });
+
+              if (!response.ok) {
+                  console.error('Error fetching all restock details:', response.status);
+                  // Set all to null and stop loading
+                  const emptyDates = {};
+                  const emptyLoading = {};
+                  ingredients.forEach(ingredient => {
+                      emptyDates[ingredient.ingredient_id] = null;
+                      emptyLoading[ingredient.ingredient_id] = false;
+                  });
+                  setLatestRestockDates(emptyDates);
+                  setLoadingRestockDates(emptyLoading);
+                  return;
+              }
+
+              const data = await response.json();
+              
+              if (data.success && Array.isArray(data.restockDetails)) {
+                  // Group restock details by ingredient_id
+                  const groupedRestockDetails = {};
+                  
+                  data.restockDetails.forEach(restock => {
+                      const ingredientId = restock.ingredient_id;
+                      
+                      if (!groupedRestockDetails[ingredientId]) {
+                          groupedRestockDetails[ingredientId] = [];
+                      }
+                      
+                      groupedRestockDetails[ingredientId].push(restock);
                   });
 
-                  if (!response.ok) {
-                      console.error(`Error fetching restock details for ingredient ${ingredient.ingredient_id}:`, response.status);
-                       // Return null or handle error appropriately
-                      return { ingredientId: ingredient.ingredient_id, latestDate: null };
-                  }
+                  // Find the latest restock date for each ingredient
+                  const newLatestRestockDates = {};
+                  const finalLoadingState = {};
+                  
+                  ingredients.forEach(ingredient => {
+                      const restocks = groupedRestockDetails[ingredient.ingredient_id] || [];
+                      
+                      if (restocks.length > 0) {
+                          // Sort by date (most recent first) and get the first one
+                          restocks.sort((a, b) => new Date(b.restock_date) - new Date(a.restock_date));
+                          newLatestRestockDates[ingredient.ingredient_id] = restocks[0].restock_date;
+                      } else {
+                          newLatestRestockDates[ingredient.ingredient_id] = null;
+                      }
+                      
+                      finalLoadingState[ingredient.ingredient_id] = false;
+                  });
 
-                  const data = await response.json();
-
-                  // Assuming the backend returns restock details ordered by date DESC, the first is the latest
-                  const latestRestock = data.restockDetails && data.restockDetails.length > 0 ? data.restockDetails[0] : null;
-
-                  return { ingredientId: ingredient.ingredient_id, latestDate: latestRestock ? latestRestock.restock_date : null };
-
-              } catch (error) {
-                  console.error(`Error fetching restock details for ingredient ${ingredient.ingredient_id}:`, error);
-                  return { ingredientId: ingredient.ingredient_id, latestDate: null };
+                  setLatestRestockDates(newLatestRestockDates);
+                  setLoadingRestockDates(finalLoadingState);
+              } else {
+                  console.warn('Unexpected data format from restock API:', data);
+                  // Set all to null and stop loading
+                  const emptyDates = {};
+                  const emptyLoading = {};
+                  ingredients.forEach(ingredient => {
+                      emptyDates[ingredient.ingredient_id] = null;
+                      emptyLoading[ingredient.ingredient_id] = false;
+                  });
+                  setLatestRestockDates(emptyDates);
+                  setLoadingRestockDates(emptyLoading);
               }
-          });
-
-          const results = await Promise.all(fetchPromises);
-
-          const newLatestRestockDates = {};
-          const finalLoadingState = {};
-          results.forEach(result => {
-              newLatestRestockDates[result.ingredientId] = result.latestDate;
-              finalLoadingState[result.ingredientId] = false;
-          });
-
-          setLatestRestockDates(newLatestRestockDates);
-          setLoadingRestockDates(finalLoadingState);
+          } catch (error) {
+              console.error('Error fetching all restock details:', error);
+              // Set all to null and stop loading
+              const emptyDates = {};
+              const emptyLoading = {};
+              ingredients.forEach(ingredient => {
+                  emptyDates[ingredient.ingredient_id] = null;
+                  emptyLoading[ingredient.ingredient_id] = false;
+              });
+              setLatestRestockDates(emptyDates);
+              setLoadingRestockDates(emptyLoading);
+          }
       };
 
-      fetchLatestRestockDates();
+      fetchAllRestockDates();
 
   }, [ingredients]); // Rerun when ingredients data changes
 
