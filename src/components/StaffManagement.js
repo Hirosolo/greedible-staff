@@ -9,7 +9,10 @@ const StaffManagement = () => {
   // modal + form state
   const [showAddModal, setShowAddModal] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
-  const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState({
+    message: "",
+    type: "", // 'success' | 'error'
+  });
   const [deletingId, setDeletingId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
@@ -69,6 +72,54 @@ const StaffManagement = () => {
       const token = localStorage.getItem("staffToken");
       if (!token) throw new Error("No staff authentication token found");
 
+      // ===== Fetch staff once for duplicate checks (email + phone) =====
+      const checkResponse = await fetch(
+        "https://greedible-backend.vercel.app/api/staff/all",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      const checkData = await checkResponse.json();
+
+      if (!checkResponse.ok || !checkData?.success) {
+        throw new Error(checkData?.message || "Failed to validate staff data.");
+      }
+
+      const existingStaff = checkData.staff || [];
+      const phoneToCheck = (formData.phone || "").trim();
+      const emailToCheck = (formData.staff_email || "").trim().toLowerCase();
+
+      // Phone duplication
+      if (phoneToCheck) {
+        const phoneExists = existingStaff.some(
+          (s) => String(s.phone || "").trim() === phoneToCheck
+        );
+        if (phoneExists) {
+          setNotification({
+            message: "Phone number already being used.",
+            type: "error",
+          });
+          setTimeout(() => setNotification({ message: "", type: "" }), 4000);
+          return;
+        }
+      }
+
+      // Email duplication
+      if (emailToCheck) {
+        const emailExists = existingStaff.some(
+          (s) => String(s.staff_email || "").trim().toLowerCase() === emailToCheck
+        );
+        if (emailExists) {
+          setNotification({
+            message: "Email already being used.",
+            type: "error",
+          });
+          setTimeout(() => setNotification({ message: "", type: "" }), 4000);
+          return;
+        }
+      }
+
       const response = await fetch(
         "https://greedible-backend.vercel.app/api/staff",
         {
@@ -103,11 +154,23 @@ const StaffManagement = () => {
         pay_rates: "",
       });
 
-      // show notification
-      setNotification("Staff added successfully!");
-      setTimeout(() => setNotification(""), 3000);
+      // show success notification
+      setNotification({
+        message: "Staff added successfully!",
+        type: "success",
+      });
+      setTimeout(() => setNotification({ message: "", type: "" }), 3000);
     } catch (err) {
-      alert(err.message);
+      const rawMessage = err?.message || "Failed to add staff.";
+      const friendly =
+        rawMessage.includes('staff_role_check') || rawMessage.includes('violates check constraint "staff_role_check"')
+          ? "Invalid staff role"
+          : rawMessage;
+      setNotification({
+        message: friendly,
+        type: "error",
+      });
+      setTimeout(() => setNotification({ message: "", type: "" }), 4000);
     } finally {
       setIsAdding(false);
     }
@@ -144,13 +207,20 @@ const StaffManagement = () => {
         prev.filter((s) => s.staff_id !== selectedStaff.staff_id)
       );
 
-      setNotification("Staff deleted successfully!");
-      setTimeout(() => setNotification(""), 3000);
+      setNotification({
+        message: "Staff deleted successfully!",
+        type: "success",
+      });
+      setTimeout(() => setNotification({ message: "", type: "" }), 3000);
 
       setShowDeleteModal(false);
       setSelectedStaff(null);
     } catch (err) {
-      alert(err.message);
+      setNotification({
+        message: err.message || "Failed to delete staff.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ message: "", type: "" }), 4000);
     } finally {
       setDeletingId(null);
     }
@@ -174,8 +244,10 @@ const StaffManagement = () => {
       </div>
 
       {/* Notification */}
-      {notification && (
-        <div className="success-notification">{notification}</div>
+      {notification.message && (
+        <div className={`success-notification ${notification.type}`}>
+          {notification.message}
+        </div>
       )}
 
       <table className="staff-table">
