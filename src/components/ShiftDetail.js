@@ -1,93 +1,112 @@
-import React, { useState, useEffect, useContext } from 'react';
-import '../styles/ShiftDetail.css';
-import AuthContext from '../contexts/AuthContext';
+import React, { useState, useEffect, useContext } from "react";
+import "../styles/ShiftDetail.css";
+import AuthContext from "../contexts/AuthContext";
 
 // Helper function to format date as YYYY-MM-DD (consistent with backend expectation)
 const formatDate = (date) => {
   const d = new Date(date);
   const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
 // API calls for removing and adding staff to shifts
 const removeStaffFromShiftAPI = async (scheduleId, token) => {
-  const response = await fetch(`https://greedible-backend.vercel.app/api/schedules/${scheduleId}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    `https://greedible-backend.vercel.app/api/schedules/${scheduleId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to remove staff from shift');
+    throw new Error(error.message || "Failed to remove staff from shift");
   }
   return response.json();
 };
 
 const addStaffToShiftAPI = async (shiftData, token) => {
-  const response = await fetch('https://greedible-backend.vercel.app/api/schedules', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify(shiftData),
-  });
+  const response = await fetch(
+    "https://greedible-backend.vercel.app/api/schedules",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(shiftData),
+    }
+  );
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to add staff to shift');
+    throw new Error(error.message || "Failed to add staff to shift");
   }
   return response.json();
 };
 
 const createShiftAPI = async (shiftData, token) => {
-  const response = await fetch('https://greedible-backend.vercel.app/api/schedules', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify(shiftData),
-  });
+  const response = await fetch(
+    "https://greedible-backend.vercel.app/api/schedules",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(shiftData),
+    }
+  );
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to create shift');
+    throw new Error(error.message || "Failed to create shift");
   }
   return response.json();
 };
 
-const deleteShiftAPI = async (scheduleId, token) => {
-  const response = await fetch(`https://greedible-backend.vercel.app/api/schedules/${scheduleId}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
+const deleteShiftAPI = async (payload, token) => {
+  const response = await fetch(
+    "https://greedible-backend.vercel.app/api/schedules",
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    }
+  );
+
   if (!response.ok) {
     const error = await response.json();
-    throw new Error(error.message || 'Failed to delete shift');
+    throw new Error(error.message || "Failed to delete shift");
   }
+
   return response.json();
 };
 
 const fetchAllStaff = async (token) => {
-   const response = await fetch('https://greedible-backend.vercel.app/api/staff/all', {
-     headers: {
-       'Authorization': `Bearer ${token}`,
-     },
-   });
-   if (!response.ok) {
-     const error = await response.json();
-     throw new Error(error.message || 'Failed to fetch staff list');
-   }
-   const data = await response.json();
-   if (data.success && data.staff) {
-     return data.staff;
-   } else {
-     return [];
-   }
+  const response = await fetch(
+    "https://greedible-backend.vercel.app/api/staff/all",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to fetch staff list");
+  }
+  const data = await response.json();
+  if (data.success && data.staff) {
+    return data.staff;
+  } else {
+    return [];
+  }
 };
 
 const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
@@ -106,33 +125,42 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
     if (isSaving) return;
     setIsSaving(true);
     setSaveError(null);
-    const token = localStorage.getItem('staffToken');
+    const token = localStorage.getItem("staffToken");
     if (!token) {
-      setSaveError('No staff authentication token found');
+      setSaveError("No staff authentication token found");
       setIsSaving(false);
       return;
     }
     // Debug log
-    const shiftDateFormatted = shift?.fullDate ? formatDate(shift.fullDate) : null;
+    const shiftDateFormatted = shift?.fullDate
+      ? formatDate(shift.fullDate)
+      : null;
     const shiftType = shift?.shift;
     // Debug output
-    console.log('DEBUG: shift:', shift);
-    console.log('DEBUG: shift.fullDate:', shift?.fullDate);
-    console.log('DEBUG: shift.shift:', shift?.shift);
-    console.log('DEBUG: user.id:', user?.id);
-    console.log('DEBUG: sign up payload:', { shift_date: shiftDateFormatted, shift: shiftType, staff_id: user?.id });
+    console.log("DEBUG: shift:", shift);
+    console.log("DEBUG: shift.fullDate:", shift?.fullDate);
+    console.log("DEBUG: shift.shift:", shift?.shift);
+    console.log("DEBUG: user.id:", user?.id);
+    console.log("DEBUG: sign up payload:", {
+      shift_date: shiftDateFormatted,
+      shift: shiftType,
+      staff_id: user?.id,
+    });
     const staffIdToSend = user?.id || user?.staff_id;
     if (!shiftDateFormatted || !shiftType || !staffIdToSend) {
-      setSaveError('Shift date, shift time, and staff ID are required.');
+      setSaveError("Shift date, shift time, and staff ID are required.");
       setIsSaving(false);
       return;
     }
     try {
-      await addStaffToShiftAPI({
-        shift_date: shiftDateFormatted,
-        shift: shiftType,
-        staff_id: staffIdToSend,
-      }, token);
+      await addStaffToShiftAPI(
+        {
+          shift_date: shiftDateFormatted,
+          shift: shiftType,
+          staff_id: staffIdToSend,
+        },
+        token
+      );
       if (onShiftUpdate) onShiftUpdate();
       onClose();
     } catch (err) {
@@ -146,19 +174,19 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
     if (isSaving) return;
     setIsSaving(true);
     setSaveError(null);
-    const token = localStorage.getItem('staffToken');
+    const token = localStorage.getItem("staffToken");
     if (!token) {
-      setSaveError('No staff authentication token found');
+      setSaveError("No staff authentication token found");
       setIsSaving(false);
       return;
     }
     try {
       // Find the schedule_id for the current user in this shift
       const person = shift.staff.find(
-        p => (p.id === user.id || p.staff_id === user.id)
+        (p) => p.id === user.id || p.staff_id === user.id
       );
       if (!person || !person.schedule_id) {
-        setSaveError('Could not find your assignment in this shift.');
+        setSaveError("Could not find your assignment in this shift.");
         setIsSaving(false);
         return;
       }
@@ -177,46 +205,53 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
   // Just show the staff list for this shift
   const staffList = shift && shift.staff ? shift.staff : [];
   // Robustly check if user is signed up (compare all possible id fields as strings)
-  const userIdStr = user ? String(user.id || user.staff_id) : '';
-  const isUserSignedUp = user && staffList.some(p => {
-    const staffIdStr = String(p.staff_id || p.id);
-    return staffIdStr === userIdStr;
-  });
+  const userIdStr = user ? String(user.id || user.staff_id) : "";
+  const isUserSignedUp =
+    user &&
+    staffList.some((p) => {
+      const staffIdStr = String(p.staff_id || p.id);
+      return staffIdStr === userIdStr;
+    });
   // Debug log
   // console.log('userIdStr:', userIdStr, 'staffList:', staffList.map(p => p.staff_id || p.id));
 
   // Manager delete shift logic
   const handleDeleteShift = async () => {
     if (isSaving) return;
+
     setIsSaving(true);
     setSaveError(null);
-    const token = localStorage.getItem('staffToken');
+
+    const token = localStorage.getItem("staffToken");
     if (!token) {
-      setSaveError('No staff authentication token found');
+      setSaveError("No staff authentication token found");
       setIsSaving(false);
       return;
     }
+
+    const shiftDate = shift?.fullDate ? formatDate(shift.fullDate) : null;
+    const shiftType = shift?.shift;
+
+    console.log("DELETE SHIFT PAYLOAD:", {
+      shift_date: shiftDate,
+      shift: shiftType,
+    });
+
+    if (!shiftDate || !shiftType) {
+      setSaveError("Shift date and shift type are required.");
+      setIsSaving(false);
+      return;
+    }
+
     try {
-      // For manager: delete all assignments for this shift (date+type)
-      const shiftDate = shift?.fullDate ? (typeof shift.fullDate === 'string' ? shift.fullDate : shift.fullDate.toISOString().slice(0, 10)) : null;
-      const shiftType = shift?.shift || shift?.time || 'Morning';
-      if (!shiftDate || !shiftType) {
-        setSaveError('No shift date or type found for this shift.');
-        setIsSaving(false);
-        return;
-      }
-      const response = await fetch('https://greedible-backend.vercel.app/api/schedules/block', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+      await deleteShiftAPI(
+        {
+          shift_date: shiftDate,
+          shift: shiftType,
         },
-        body: JSON.stringify({ shift_date: shiftDate, shift: shiftType }),
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to delete shift');
-      }
+        token
+      );
+
       if (onShiftUpdate) onShiftUpdate();
       onClose();
     } catch (err) {
@@ -231,11 +266,15 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
       <div className="shift-detail-header">
         <h3 className="shift-detail-title">Shift Details</h3>
         <div className="header-buttons">
-          <button className="close-btn" onClick={onClose} disabled={isSaving}>×</button>
+          <button className="close-btn" onClick={onClose} disabled={isSaving}>
+            ×
+          </button>
         </div>
       </div>
       <div className="shift-time-display">
-        {shift?.fullDate ? `${shift.fullDate.toLocaleDateString()} - ${shift?.time || 'N/A'}` : 'N/A'}
+        {shift?.fullDate
+          ? `${shift.fullDate.toLocaleDateString()} - ${shift?.time || "N/A"}`
+          : "N/A"}
       </div>
       {saveError && <div className="error-message">{saveError}</div>}
       <div className="staff-list">
@@ -245,26 +284,28 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
             <div key={person.id || person.staff_id} className="staff-item">
               <div className="staff-info">
                 <div className="staff-avatar-container">
-                  <img 
-                    src={person.avatar} 
+                  <img
+                    src={person.avatar}
                     alt={person.name || person.staff_name}
                     className="staff-photo"
                     onError={(e) => {
-                      e.target.style.display = 'none';
+                      e.target.style.display = "none";
                       if (e.target.nextSibling) {
-                        e.target.nextSibling.style.display = 'flex';
+                        e.target.nextSibling.style.display = "flex";
                       }
                     }}
-                    style={{ display: person.avatar ? '' : 'none' }}
+                    style={{ display: person.avatar ? "" : "none" }}
                   />
-                  <div 
+                  <div
                     className="staff-avatar-fallback"
-                    style={{ 
-                      backgroundColor: person.color || '#CCCCCC',
-                      display: person.avatar ? 'none' : 'flex'
+                    style={{
+                      backgroundColor: person.color || "#CCCCCC",
+                      display: person.avatar ? "none" : "flex",
                     }}
                   >
-                    {(person.name || person.staff_name) ? (person.name || person.staff_name).charAt(0) : '?'}
+                    {person.name || person.staff_name
+                      ? (person.name || person.staff_name).charAt(0)
+                      : "?"}
                   </div>
                 </div>
                 <div className="staff-details">
@@ -281,18 +322,32 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
         )}
       </div>
       <div className="shift-actions">
-        {user?.role === 'Manager' && (
-          <button className="save-shift-btn delete-btn" onClick={handleDeleteShift} disabled={isSaving} style={{ marginBottom: 8 }}>
-            {isSaving ? 'Processing...' : 'Delete Shift'}
+        {user?.role === "Manager" && (
+          <button
+            className="save-shift-btn delete-btn"
+            onClick={handleDeleteShift}
+            disabled={isSaving}
+            style={{ marginBottom: 8 }}
+          >
+            {isSaving ? "Processing..." : "Delete Shift"}
           </button>
         )}
+
         {isUserSignedUp ? (
-          <button className="save-shift-btn delete-btn" onClick={handleUnassign} disabled={isSaving}>
-            {isSaving ? 'Processing...' : 'Un-assign from this shift'}
+          <button
+            className="save-shift-btn delete-btn"
+            onClick={handleUnassign}
+            disabled={isSaving}
+          >
+            {isSaving ? "Processing..." : "Un-assign from this shift"}
           </button>
         ) : (
-          <button className="save-shift-btn" onClick={handleSignUp} disabled={isSaving}>
-            {isSaving ? 'Processing...' : 'Sign up for this shift'}
+          <button
+            className="save-shift-btn"
+            onClick={handleSignUp}
+            disabled={isSaving}
+          >
+            {isSaving ? "Processing..." : "Sign up for this shift"}
           </button>
         )}
       </div>
