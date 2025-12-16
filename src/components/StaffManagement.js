@@ -62,11 +62,29 @@ const StaffManagement = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const isValidPhone = (phone) => {
+    const phoneRegex = /^0\d{9}$/; // starts with 0, total 10 digits
+    return phoneRegex.test(phone);
+  };
+
   const handleAddStaff = async (e) => {
     e.preventDefault();
     if (isAdding) return; // prevent double click
 
     setIsAdding(true);
+
+    const phoneToCheck = (formData.phone || "").trim();
+
+    if (phoneToCheck && !isValidPhone(phoneToCheck)) {
+      setNotification({
+        message:
+          "Phone number must start with 0 and contain exactly 10 digits.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ message: "", type: "" }), 4000);
+      setIsAdding(false);
+      return;
+    }
 
     try {
       const token = localStorage.getItem("staffToken");
@@ -108,7 +126,10 @@ const StaffManagement = () => {
       // Email duplication
       if (emailToCheck) {
         const emailExists = existingStaff.some(
-          (s) => String(s.staff_email || "").trim().toLowerCase() === emailToCheck
+          (s) =>
+            String(s.staff_email || "")
+              .trim()
+              .toLowerCase() === emailToCheck
         );
         if (emailExists) {
           setNotification({
@@ -163,7 +184,8 @@ const StaffManagement = () => {
     } catch (err) {
       const rawMessage = err?.message || "Failed to add staff.";
       const friendly =
-        rawMessage.includes('staff_role_check') || rawMessage.includes('violates check constraint "staff_role_check"')
+        rawMessage.includes("staff_role_check") ||
+        rawMessage.includes('violates check constraint "staff_role_check"')
           ? "Invalid staff role"
           : rawMessage;
       setNotification({
@@ -386,7 +408,11 @@ const StaffManagement = () => {
             <div className="modal-actions">
               <button
                 className="cancel-btn"
-                style={{ backgroundColor: "#6C757D", color: "white", width: '100px'}}
+                style={{
+                  backgroundColor: "#6C757D",
+                  color: "white",
+                  width: "100px",
+                }}
                 onClick={() => {
                   setShowDeleteModal(false);
                   setSelectedStaff(null);
@@ -398,7 +424,11 @@ const StaffManagement = () => {
 
               <button
                 className="delete-btn"
-                style={{ backgroundColor: "#DC3545", color: "white", maxWidth: '100px'}}
+                style={{
+                  backgroundColor: "#DC3545",
+                  color: "white",
+                  maxWidth: "100px",
+                }}
                 onClick={handleDeleteStaff}
                 disabled={deletingId === selectedStaff.staff_id}
               >
