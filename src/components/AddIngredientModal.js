@@ -50,7 +50,7 @@ const AddIngredientModal = ({ show, onClose, onAdded }) => {
 
   return (
     <div className="modal-backdrop">
-      <div className="modal-card">
+      <div className="modal-card" style={{padding:'2.5rem', marginLeft:'0rem'}}>
         <h3>Add New Ingredient</h3>
 
         {error && <div className="error">{error}</div>}
@@ -89,7 +89,7 @@ const AddIngredientModal = ({ show, onClose, onAdded }) => {
             onChange={handleChange}
           />
 
-          <div className="modal-actions">
+          <div className="modal-actions" style={{marginLeft:'0rem'}}>
             <button type="button" onClick={onClose}>
               Cancel
             </button>

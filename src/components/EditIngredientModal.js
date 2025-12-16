@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { updateIngredient } from '../api/ingredientApi';
 import toast from 'react-hot-toast';
-import '../styles/EditIngredientModal.css'; // Assuming a new CSS file for the modal
+import '../styles/EditIngredientModal.css';
 
 const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated }) => {
   const [formData, setFormData] = useState({
@@ -100,11 +100,11 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
 
           {error && <div className="error-message">{error}</div>}
 
-          <div className="modal-actions">
-            <button type="submit" disabled={loading}>
+          <div className="modal-actions" style={{marginLeft: '0rem'}}>
+            <button type="button" onClick={onClose} disabled={loading}>Cancel</button>
+                        <button type="submit" disabled={loading}>
               {loading ? 'Saving...' : 'Save Changes'}
             </button>
-            <button type="button" onClick={onClose} disabled={loading}>Cancel</button>
           </div>
         </form>
       </div>

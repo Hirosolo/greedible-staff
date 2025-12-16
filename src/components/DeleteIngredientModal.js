@@ -29,8 +29,8 @@ const DeleteIngredientModal = ({ ingredientId, ingredientName, onDeleteSuccess, 
       <h3>Confirm Deletion</h3>
       <p>Are you sure you want to delete "{ingredientName}"?</p>
       {error && <div className="error-message">{error}</div>}
-      <div className="modal-actions">
-        <button className="modal-btn" onClick={onCancel} disabled={loading}>Cancel</button>
+      <div className="modal-actions" style={{marginLeft:'0rem'}}>
+        <button className="modal-btn" style={{backgroundColor:'#E0E0E0'}} onClick={onCancel} disabled={loading}>Cancel</button>
         <button className="modal-btn delete-btn" onClick={handleDelete} disabled={loading}>
           {loading ? 'Deleting...' : 'Delete'}
         </button>
