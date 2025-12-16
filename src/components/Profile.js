@@ -142,9 +142,86 @@ const Profile = () => {
       <h2 className="profile-title">Profile</h2>
       
       <div className="profile-content">
-        {/* Profile Information Section */}
-        <div className="profile-section">
-          <h3 className="profile-section-title">Personal Information</h3>
+        {/* Left Column: Schedule */}
+        <div className="profile-left-column">
+          {/* Schedule Section (monthly calendar for this employee) */}
+          <div className="profile-section">
+            <h3 className="profile-section-title">Schedule</h3>
+
+            <div className="month-navigation" style={{ marginBottom: 12 }}>
+              <select value={selectedMonth} onChange={(e) => setSelectedMonth(Number(e.target.value))}>
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {new Date(0, i).toLocaleString('default', { month: 'long' })}
+                  </option>
+                ))}
+              </select>
+
+              <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}>
+                {Array.from({ length: 5 }, (_, i) => {
+                  const year = today.getFullYear() - 2 + i;
+                  return (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+
+            {scheduleLoading ? (
+              <div className="loading-message">Loading schedule...</div>
+            ) : scheduleError ? (
+              <div className="error-message">{scheduleError}</div>
+            ) : (
+              <div className="shift-calendar">
+                <div className="calendar-grid">
+                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
+                    <div key={d} className="day-header">
+                      {d}
+                    </div>
+                  ))}
+
+                  {/* empty cells before month start (Monday-based) */}
+                  {Array.from({ length: (new Date(selectedYear, selectedMonth - 1, 1).getDay() + 6) % 7 }).map((_, i) => (
+                    <div key={`empty-${i}`} className="day-cell empty" />
+                  ))}
+
+                  {/* Month dates */}
+                  {Array.from({ length: new Date(selectedYear, selectedMonth, 0).getDate() }, (_, idx) => {
+                    const dateNum = idx + 1;
+                    const daySchedules = scheduleData[dateNum] || [];
+
+                    return (
+                      <div key={dateNum} className="day-cell">
+                        <div className="day-number">{dateNum}/{selectedMonth}/{selectedYear}</div>
+
+                        {daySchedules.length === 0 ? (
+                          <div className="no-shifts full-day">No shifts</div>
+                        ) : (
+                          <div className="shift-slots">
+                            {daySchedules.map((s) => (
+                              <div key={s.schedule_id} className="shift-block">
+                                <div className="shift-time">{s.shift}</div>
+                                <div className="shift-count">Assigned</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column: Personal Info and Salary */}
+        <div className="profile-right-column">
+          {/* Profile Information Section */}
+          <div className="profile-section">
+            <h3 className="profile-section-title">Personal Information</h3>
           <div className="profile-info-grid">
             <div className="profile-info-item">
               <span className="profile-info-label">ID:</span>
@@ -185,77 +262,6 @@ const Profile = () => {
             </div>
           </div>
         </div>
-
-        {/* Schedule Section (monthly calendar for this employee) */}
-        <div className="profile-section">
-          <h3 className="profile-section-title">Schedule</h3>
-
-          <div className="month-navigation" style={{ marginBottom: 12 }}>
-            <select value={selectedMonth} onChange={(e) => setSelectedMonth(Number(e.target.value))}>
-              {Array.from({ length: 12 }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {new Date(0, i).toLocaleString('default', { month: 'long' })}
-                </option>
-              ))}
-            </select>
-
-            <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))}>
-              {Array.from({ length: 5 }, (_, i) => {
-                const year = today.getFullYear() - 2 + i;
-                return (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          {scheduleLoading ? (
-            <div className="loading-message">Loading schedule...</div>
-          ) : scheduleError ? (
-            <div className="error-message">{scheduleError}</div>
-          ) : (
-            <div className="shift-calendar">
-              <div className="calendar-grid">
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => (
-                  <div key={d} className="day-header">
-                    {d}
-                  </div>
-                ))}
-
-                {/* empty cells before month start (Monday-based) */}
-                {Array.from({ length: (new Date(selectedYear, selectedMonth - 1, 1).getDay() + 6) % 7 }).map((_, i) => (
-                  <div key={`empty-${i}`} className="day-cell empty" />
-                ))}
-
-                {/* Month dates */}
-                {Array.from({ length: new Date(selectedYear, selectedMonth, 0).getDate() }, (_, idx) => {
-                  const dateNum = idx + 1;
-                  const daySchedules = scheduleData[dateNum] || [];
-
-                  return (
-                    <div key={dateNum} className="day-cell">
-                      <div className="day-number">{dateNum}/{selectedMonth}/{selectedYear}</div>
-
-                      {daySchedules.length === 0 ? (
-                        <div className="no-shifts full-day">No shifts</div>
-                      ) : (
-                        <div className="shift-slots">
-                          {daySchedules.map((s) => (
-                            <div key={s.schedule_id} className="shift-block">
-                              <div className="shift-time">{s.shift}</div>
-                              <div className="shift-count">Assigned</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
         </div>
 
       </div>

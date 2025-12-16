@@ -1,6 +1,6 @@
 .profile-container {
   width: 100%;
-  max-width: 800px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -13,6 +13,19 @@
 }
 
 .profile-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 30px;
+  align-items: start;
+}
+
+.profile-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.profile-right-column {
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -101,6 +114,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .profile-content {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .profile-container {
     padding: 15px;
