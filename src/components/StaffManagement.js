@@ -25,6 +25,7 @@ const StaffManagement = () => {
     phone: "",
     pay_rates: "",
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   /* ================= FETCH STAFF ================= */
   const fetchStaff = async () => {
@@ -256,13 +257,22 @@ const StaffManagement = () => {
     <div className="staff-management-container">
       <div className="staff-header">
         <h2>Staff Management</h2>
-        <button
-          className="add-staff-btn"
-          style={{ backgroundColor: "#6B994E" }}
-          onClick={() => setShowAddModal(true)}
-        >
-          + Add New Staff
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <input
+            type="text"
+            placeholder="Search staff by name, email, role or phone"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="staff-search-input"
+          />
+          <button
+            className="add-staff-btn"
+            style={{ backgroundColor: "#6B994E" }}
+            onClick={() => setShowAddModal(true)}
+          >
+            + Add New Staff
+          </button>
+        </div>
       </div>
 
       {/* Notification */}
@@ -284,7 +294,18 @@ const StaffManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {staff.map((member) => (
+          {staff
+            .filter((member) => {
+              if (!searchTerm) return true;
+              const term = searchTerm.toLowerCase();
+              return (
+                String(member.staff_name || '').toLowerCase().includes(term) ||
+                String(member.staff_email || '').toLowerCase().includes(term) ||
+                String(member.role || '').toLowerCase().includes(term) ||
+                String(member.phone || '').toLowerCase().includes(term)
+              );
+            })
+            .map((member) => (
             <tr key={member.staff_id}>
               <td>{member.staff_id}</td>
               <td>{member.staff_name}</td>

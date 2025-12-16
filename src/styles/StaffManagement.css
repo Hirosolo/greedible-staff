@@ -105,6 +105,20 @@
   align-items: center;
 }
 
+.staff-search-input {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  width: 320px;
+  max-width: 40vw;
+}
+
+@media (max-width: 768px) {
+  .staff-search-input {
+    width: 160px;
+  }
+}
+
 .add-staff-btn {
   padding: 8px 14px;
   border-radius: 8px;
