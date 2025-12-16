@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Salaries from '../components/Salaries';
+import Profile from '../components/Profile';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -99,7 +100,7 @@ const StaffPage = () => {
                 className={`tab-button ${activeTab === 'staff' ? 'active' : ''}`}
                 onClick={() => handleTabClick('staff')}
               >
-                {user?.role === 'Manager' ? 'Staff Management' : 'Salaries'}
+                {(user?.role?.toLowerCase() === 'manager' || user?.role?.toLowerCase() === 'admin') ? 'Staff Management' : 'Profile'}
               </button>
             </div>
 
@@ -111,13 +112,13 @@ const StaffPage = () => {
                 </div>
               )}
               {activeTab === 'staff' && (
-                user?.role === 'Manager' ? (
+                (user?.role?.toLowerCase() === 'manager' || user?.role?.toLowerCase() === 'admin') ? (
                   <div className="staff-list-section" style={{ marginTop: '30px' }}>
                     <h2>All Staff Members</h2>
                     <StaffManagement />
                   </div>
                 ) : (
-                  <Salaries />
+                  <Profile />
                 )
               )}
             </div>

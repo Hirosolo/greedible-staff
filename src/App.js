@@ -12,20 +12,13 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
   // If not authenticated, redirect to login
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  // If not manager and not on /staff, redirect to /staff
-  const isManager = user?.role === 'Manager';
-  const currentPath = window.location.pathname;
-  if (!isManager && currentPath !== '/staff') {
-    return <Navigate to="/staff" replace />;
-  }
   return children;
 };
 
-// For manager-only pages
+// For manager/admin-only pages (deprecated - now all authenticated users can access pages)
 const ProtectedManagerRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user?.role !== 'Manager') return <Navigate to="/staff" replace />;
   return children;
 };
 
@@ -39,25 +32,25 @@ function App() {
           <Route 
             path="/dashboard" 
             element={
-              <ProtectedManagerRoute>
+              <ProtectedRoute>
                 <DashboardPage />
-              </ProtectedManagerRoute>
+              </ProtectedRoute>
             } 
           />
           <Route 
             path="/recipe" 
             element={
-              <ProtectedManagerRoute>
+              <ProtectedRoute>
                 <RecipePage />
-              </ProtectedManagerRoute>
+              </ProtectedRoute>
             } 
           />
           <Route 
   path="/inventory" 
   element={
-    <ProtectedManagerRoute>
+    <ProtectedRoute>
       <InventoryPage />
-    </ProtectedManagerRoute>
+    </ProtectedRoute>
   } 
 />
           <Route 

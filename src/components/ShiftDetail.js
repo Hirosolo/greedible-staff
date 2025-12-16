@@ -322,7 +322,7 @@ const ShiftDetail = ({ shift, onClose, onShiftUpdate, isNewShift }) => {
         )}
       </div>
       <div className="shift-actions">
-        {user?.role === "Manager" && (
+        {(user?.role?.toLowerCase() === "manager" || user?.role?.toLowerCase() === "admin") && (
           <button
             className="save-shift-btn delete-btn"
             onClick={handleDeleteShift}

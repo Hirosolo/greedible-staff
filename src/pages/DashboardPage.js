@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Revenue from '../components/Revenue'; 
@@ -7,6 +8,7 @@ import Order from '../components/Order';
 import Ingredients from '../components/Ingredients';
 import '../styles/DashboardPage.css';
 const DashboardPage = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState('Revenue');
@@ -399,6 +401,7 @@ const DashboardPage = () => {
                   dailyRevenueData={dailyRevenueData}
                   dailyImportData={dailyImportData}
                   employeeData={employeeData} // Pass employee data here too, as it's always fetched
+                  user={user} // Pass user for role-based rendering
                 />;
       case 'Order':
         return (

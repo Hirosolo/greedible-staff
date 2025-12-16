@@ -200,7 +200,7 @@ const ShiftView = ({ scheduleRefreshTrigger }) => {
             })}
           </select>
 
-          {user?.role === "Manager" && (
+          {(user?.role?.toLowerCase() === "manager" || user?.role?.toLowerCase() === "admin") && (
             <button className="add-shift-btn" onClick={handleAddShiftClick}>
               Add Shift
             </button>

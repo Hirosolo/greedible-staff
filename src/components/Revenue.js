@@ -15,7 +15,7 @@ ChartJS.register(
   PointElement
 );
 
-const Revenue = ({ onTabChange, dailySalesData, selectedMonth, selectedYear, dailyRevenueData, dailyImportData, employeeData }) => {
+const Revenue = ({ onTabChange, dailySalesData, selectedMonth, selectedYear, dailyRevenueData, dailyImportData, employeeData, user }) => {
   const currentDate = new Date().toLocaleDateString('vi-VN', {
     weekday: 'short',
     day: '2-digit',
@@ -313,36 +313,38 @@ const Revenue = ({ onTabChange, dailySalesData, selectedMonth, selectedYear, dai
             </div>
           </div>
 
-          {/* Salaries Card - Employee Salaries Table */}
-          <div className="dashboard-card salaries-card">
-            <div className="card-header">
-              <h3>Employee Salaries ({selectedMonth}/{selectedYear})</h3>{/* Updated title */}
-            </div>
-            <div className="card-content">
-              {employeeData && employeeData.length > 0 ? (
-                <table className="salaries-table">{/* Add a class for styling */}
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Role</th>
-                      <th>Salaries</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {employeeData.map((employee, index) => (
-                      <tr key={index}> {/* Use a unique key if possible, like employee ID */}
-                        <td>{employee.name}</td>
-                        <td>{employee.role}</td>
-                        <td>{formatCurrency(employee.total_pay)}</td>{/* Show calculated salary */}
+          {/* Salaries Card - Employee Salaries Table - Only show for manager/admin */}
+          {(user?.role?.toLowerCase() === 'manager' || user?.role?.toLowerCase() === 'admin') && (
+            <div className="dashboard-card salaries-card">
+              <div className="card-header">
+                <h3>Employee Salaries ({selectedMonth}/{selectedYear})</h3>{/* Updated title */}
+              </div>
+              <div className="card-content">
+                {employeeData && employeeData.length > 0 ? (
+                  <table className="salaries-table">{/* Add a class for styling */}
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Salaries</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p>No employee data available.</p>
-              )}
+                    </thead>
+                    <tbody>
+                      {employeeData.map((employee, index) => (
+                        <tr key={index}> {/* Use a unique key if possible, like employee ID */}
+                          <td>{employee.name}</td>
+                          <td>{employee.role}</td>
+                          <td>{formatCurrency(employee.total_pay)}</td>{/* Show calculated salary */}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>No employee data available.</p>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
         
         {/* Right Column */}

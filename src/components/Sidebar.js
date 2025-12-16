@@ -6,18 +6,15 @@ const Sidebar = ({ onMenuClick, activeMenu: propActiveMenu }) => {
   const [activeMenu, setActiveMenu] = useState(propActiveMenu || 'Dashboard');
 
   const { user } = useContext(AuthContext);
-  const isManager = user && user.role === 'Manager';
+  const userRole = user?.role?.toLowerCase();
+  const isManagerOrAdmin = userRole === 'manager' || userRole === 'admin';
 
-  const menuItems = isManager
-    ? [
-        { id: 'Dashboard', label: 'Dashboard', icon: '📊' },
-        { id: 'Recipe', label: 'Recipe', icon: '👨‍🍳' },
-        { id: 'Inventory', label: 'Inventory', icon: '📦' },
-        { id: 'Staff', label: 'Staff', icon: '👥' },
-      ]
-    : [
-        { id: 'Staff', label: 'Staff', icon: '👥' },
-      ];
+  const menuItems = [
+    { id: 'Dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'Recipe', label: 'Recipe', icon: '👨‍🍳' },
+    { id: 'Inventory', label: 'Inventory', icon: '📦' },
+    { id: 'Staff', label: 'Staff', icon: '👥' },
+  ];
 
   // Update internal state when prop changes
   useEffect(() => {
