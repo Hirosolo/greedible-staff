@@ -1,5 +1,5 @@
 export const validateStaffToken = async (token) => {
-  const response = await fetch('https://greedible-backend-staff.vercel.app/api/staff/me', {
+  const response = await fetch('https://greedible-backend.vercel.app/api/staff/me', {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,

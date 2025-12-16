@@ -24,7 +24,7 @@ const RecipePage = () => {
   // Define fetchRecipes function outside of useEffect
   const fetchRecipes = async () => {
     try {
-      const response = await fetch('https://greedible-backend-staff.vercel.app/api/recipes');
+      const response = await fetch('https://greedible-backend.vercel.app/api/recipes');
       if (!response.ok) {
         throw new Error('Failed to fetch recipes');
       }
@@ -99,7 +99,7 @@ const RecipePage = () => {
     setSelectedRecipe(null); // Clear previous selected recipe
 
     try {
-        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/recipes/${recipe.id}`);
+        const response = await fetch(`https://greedible-backend.vercel.app/api/recipes/${recipe.id}`);
         if (!response.ok) {
             const data = await response.json();
             throw new Error(data.error || 'Failed to fetch recipe details');

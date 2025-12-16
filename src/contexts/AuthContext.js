@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     
     try {
-      const response = await fetch('https://greedible-backend-staff.vercel.app/api/staff/login', {
+      const response = await fetch('https://greedible-backend.vercel.app/api/staff/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

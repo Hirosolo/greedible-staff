@@ -276,7 +276,7 @@ const EditRecipe = ({ recipe, onSave, onCancel }) => {
 
     try {
       const response = await fetch(
-        `https://greedible-backend-staff.vercel.app/api/recipes/${recipeId}`,
+        `https://greedible-backend.vercel.app/api/recipes/${recipeId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -294,12 +294,12 @@ const EditRecipe = ({ recipe, onSave, onCancel }) => {
         visible: true,
         message: "Recipe updated successfully",
       });
-      
+
       setTimeout(() => {
         setToast({ visible: false, message: "" });
         onCancel();
       }, 3000);
-      
+
       onSave({
         success: true,
         recipe: { ...updatedRecipeData, recipe_id: recipeId },
@@ -332,7 +332,7 @@ const EditRecipe = ({ recipe, onSave, onCancel }) => {
           <div className="recipe-image-container">
             {selectedImage ? (
               <img
-                src={`https://greedible-backend-staff.vercel.app${selectedImage}`}
+                src={`https://greedible-backend.vercel.app${selectedImage}`}
                 alt={title}
                 className="recipe-image"
                 onError={(e) => {
@@ -522,20 +522,21 @@ const EditRecipe = ({ recipe, onSave, onCancel }) => {
           </table>
         </div>
       </div>
-      <div className="modal-actions">
+      <div className="modal-actions" style={{margin:'auto'}}>
+        <button
+          className="save-btn"
+          style={{ marginLeft: "auto" }}
+          onClick={handleSave}
+          disabled={loading || fetchingIngredients}
+        >
+          {loading ? "Saving..." : "Save"}
+        </button>
         <button
           className="cancel-btn"
           onClick={onCancel}
           disabled={loading || fetchingIngredients}
         >
           Cancel
-        </button>
-        <button
-          className="save-btn"
-          onClick={handleSave}
-          disabled={loading || fetchingIngredients}
-        >
-          {loading ? "Saving..." : "Save"}
         </button>
       </div>
     </div>

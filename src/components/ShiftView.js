@@ -51,7 +51,7 @@ const ShiftView = ({ onShiftClick, scheduleRefreshTrigger }) => {
         const startDateString = formatDate(currentWeek); // Format the start date
         console.log('Fetching schedule for week starting:', startDateString);
 
-        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/schedules/week?startDate=${startDateString}`, {
+        const response = await fetch(`https://greedible-backend.vercel.app/api/schedules/week?startDate=${startDateString}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -137,7 +137,7 @@ const ShiftView = ({ onShiftClick, scheduleRefreshTrigger }) => {
     try {
       const token = localStorage.getItem('staffToken');
       if (!token) throw new Error('No staff authentication token found');
-      const response = await fetch('https://greedible-backend-staff.vercel.app/api/schedules', {
+      const response = await fetch('https://greedible-backend.vercel.app/api/schedules', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

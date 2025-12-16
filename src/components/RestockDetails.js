@@ -23,7 +23,7 @@ const RestockDetails = ({ order, onClose }) => {
           throw new Error('No staff authentication token found'); // Handle missing token
         }
 
-        const response = await fetch(`https://greedible-backend-staff.vercel.app/api/restock/${order.restock_id}`, {
+        const response = await fetch(`https://greedible-backend.vercel.app/api/restock/${order.restock_id}`, {
           headers: {
             'Authorization': `Bearer ${token}`, // Add Authorization header
           },

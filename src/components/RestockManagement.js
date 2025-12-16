@@ -17,7 +17,7 @@ const RestockManagement = ({ onViewDetails }) => {
         }
 
         const response = await fetch(
-          "https://greedible-backend-staff.vercel.app/api/restock",
+          "https://greedible-backend.vercel.app/api/restock",
           {
             headers: {
               Authorization: `Bearer ${token}`,

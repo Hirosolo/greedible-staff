@@ -98,3 +98,65 @@
     padding: 6px 8px;
   }
 } 
+
+.staff-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-staff-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #28a745;
+  color: white;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: white;
+  padding: 50px;
+  border-radius: 12px;
+  width: 40rem;
+}
+
+.staff-form input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.modal-actions {
+  width: 100%;
+  margin-left: 7.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.save-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+}

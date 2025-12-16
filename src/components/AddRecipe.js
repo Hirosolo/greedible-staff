@@ -256,7 +256,7 @@ const AddRecipe = ({ onSave, onCancel }) => {
     formData.append('ingredients', JSON.stringify(formattedIngredients));
 
     try {
-      const response = await fetch('https://greedible-backend-staff.vercel.app/api/recipes', {
+      const response = await fetch('https://greedible-backend.vercel.app/api/recipes', {
         method: 'POST',
         body: formData,
       });
@@ -317,7 +317,7 @@ const AddRecipe = ({ onSave, onCancel }) => {
             >
                 {selectedImage ? (
                      <img
-                        src={typeof selectedImage === 'string' ? `https://greedible-backend-staff.vercel.app${selectedImage}` : URL.createObjectURL(selectedImage)}
+                        src={typeof selectedImage === 'string' ? `https://greedible-backend.vercel.app${selectedImage}` : URL.createObjectURL(selectedImage)}
                         alt="Selected Recipe"
                      />
                 ) : (

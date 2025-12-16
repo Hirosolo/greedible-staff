@@ -26,7 +26,7 @@ const AddIngredient = ({ onSave, onCancel }) => {
     setError(null);
 
     try {
-      const response = await fetch('https://greedible-backend-staff.vercel.app/api/ingredients', {
+      const response = await fetch('https://greedible-backend.vercel.app/api/ingredients', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -84,7 +84,7 @@ const InventoryPage = () => {
         throw new Error('No staff authentication token found');
       }
 
-      const response = await fetch('https://greedible-backend-staff.vercel.app/api/restock', {
+      const response = await fetch('https://greedible-backend.vercel.app/api/restock', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

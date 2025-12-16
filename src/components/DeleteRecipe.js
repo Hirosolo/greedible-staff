@@ -9,7 +9,7 @@ const DeleteRecipe = ({ recipeId, onDeleteSuccess, onCancel }) => {
     setError(null);
 
     try {
-      const response = await fetch(`https://greedible-backend-staff.vercel.app/api/recipes/${recipeId}`, {
+      const response = await fetch(`https://greedible-backend.vercel.app/api/recipes/${recipeId}`, {
         method: 'DELETE',
         // TODO: Add authentication token if needed
         headers: {

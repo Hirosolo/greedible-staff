@@ -46,7 +46,7 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
       try {
         // Call the API to get all restock details in one call
         const response = await fetch(
-          `https://greedible-backend-staff.vercel.app/api/ingredients/restocks`,
+          `https://greedible-backend.vercel.app/api/ingredients/restocks`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

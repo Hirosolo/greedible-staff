@@ -1,60 +1,130 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/StaffManagement.css'; // Assuming a new CSS file
+import React, { useState, useEffect } from "react";
+import "../styles/StaffManagement.css";
 
 const StaffManagement = () => {
   const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchStaff = async () => {
-      try {
-        const token = localStorage.getItem('staffToken'); // Retrieve staff token
-        if (!token) {
-          throw new Error('No staff authentication token found');
-        }
+  // modal + form state
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [formData, setFormData] = useState({
+    staff_name: "",
+    staff_email: "",
+    password: "",
+    role: "",
+    phone: "",
+    pay_rates: "",
+  });
 
-        console.log('Fetching staff data...');
-        const response = await fetch('https://greedible-backend-staff.vercel.app/api/staff/all', {
+  /* ================= FETCH STAFF ================= */
+  const fetchStaff = async () => {
+    try {
+      const token = localStorage.getItem("staffToken");
+      if (!token) throw new Error("No staff authentication token found");
+
+      const response = await fetch(
+        "https://greedible-backend.vercel.app/api/staff/all",
+        {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch staff data: ${response.status}`);
         }
+      );
 
-        const data = await response.json();
-        console.log('Staff data fetched:', data);
-
-        if (data.success && data.staff) {
-          setStaff(data.staff);
-        } else {
-          setStaff([]); // Clear data on error or if no staff are returned
-        }
-      } catch (err) {
-        console.error('Error fetching staff data:', err);
-        setError('Failed to load staff data.');
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch staff data: ${response.status}`);
       }
-    };
 
+      const data = await response.json();
+      if (data.success && data.staff) {
+        setStaff(data.staff);
+      } else {
+        setStaff([]);
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load staff data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchStaff();
-  }, []); // Fetch staff data on component mount
+  }, []);
 
-  if (loading) {
+  /* ================= ADD STAFF ================= */
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddStaff = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const token = localStorage.getItem('staffToken');
+      if (!token) throw new Error('No staff authentication token found');
+  
+      const response = await fetch(
+        'https://greedible-backend.vercel.app/api/staff',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            ...formData,
+            pay_rates: Number(formData.pay_rates),
+          }),
+        }
+      );
+  
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : null;
+  
+      if (!response.ok) {
+        throw new Error(data?.message || 'Failed to add staff');
+      }
+  
+      if (!data?.success) {
+        throw new Error('Staff creation failed');
+      }
+  
+      // update UI immediately
+      setStaff((prev) => [...prev, data.data]);
+  
+      setShowAddModal(false);
+      setFormData({
+        staff_name: '',
+        staff_email: '',
+        password: '',
+        role: '',
+        phone: '',
+        pay_rates: '',
+      });
+    } catch (err) {
+      console.error('Add staff error:', err);
+      alert(err.message);
+    }
+  };
+  
+
+  if (loading)
     return <div className="loading-message">Loading staff data...</div>;
-  }
-
-  if (error) {
-    return <div className="error-message">{error}</div>;
-  }
+  if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="staff-management-container">
-      <h2>Staff Management</h2>
+      <div className="staff-header">
+        <h2>Staff Management</h2>
+        <button className="add-staff-btn" style={{backgroundColor:'#6B994E'}} onClick={() => setShowAddModal(true)}>
+          + Add New Staff
+        </button>
+      </div>
+
       <table className="staff-table">
         <thead>
           <tr>
@@ -77,13 +147,92 @@ const StaffManagement = () => {
           ))}
         </tbody>
       </table>
-      {staff.length === 0 && !loading && !error && (
-        <div className="no-results">
-          No staff members available.
+
+      {staff.length === 0 && (
+        <div className="no-results">No staff members available.</div>
+      )}
+
+      {/* ================= ADD STAFF MODAL ================= */}
+      {showAddModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Add New Staff</h3>
+
+            <form onSubmit={handleAddStaff} className="staff-form">
+              <input
+                name="staff_name"
+                placeholder="Staff Name"
+                value={formData.staff_name}
+                onChange={handleInputChange}
+                required
+              />
+
+              <input
+                name="staff_email"
+                type="email"
+                placeholder="Email"
+                value={formData.staff_email}
+                onChange={handleInputChange}
+                required
+              />
+
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+              />
+
+              <input
+                name="role"
+                placeholder="Role (Chef, Admin, Staff...)"
+                value={formData.role}
+                onChange={handleInputChange}
+                required
+              />
+
+              <input
+                name="phone"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+              />
+
+              <input
+                name="pay_rates"
+                type="number"
+                step="0.01"
+                placeholder="Pay Rate"
+                value={formData.pay_rates}
+                onChange={handleInputChange}
+                required
+              />
+
+              <div className="modal-actions">
+                <button
+                  type="submit"
+                  className="save-btn"
+                  style={{ backgroundColor: "#6B994E" }}
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  style={{ backgroundColor: "#6C757D", color:'white' }}
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
   );
 };
 
-export default StaffManagement; 
+export default StaffManagement;

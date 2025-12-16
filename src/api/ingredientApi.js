@@ -4,7 +4,7 @@ export const fetchIngredients = async () => {
     throw new Error('No staff authentication token found');
   }
   
-  const response = await fetch('https://greedible-backend-staff.vercel.app/api/ingredients', {
+  const response = await fetch('https://greedible-backend.vercel.app/api/ingredients', {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
@@ -28,7 +28,7 @@ export const deleteIngredient = async (ingredientId) => {
      throw new Error('No staff authentication token found');
    }
 
-  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/${ingredientId}`, {
+  const response = await fetch(`https://greedible-backend.vercel.app/api/ingredients/${ingredientId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -50,7 +50,7 @@ export const updateIngredient = async (ingredientId, ingredientData) => {
      throw new Error('No staff authentication token found');
    }
 
-  const response = await fetch(`https://greedible-backend-staff.vercel.app/api/ingredients/${ingredientId}`, {
+  const response = await fetch(`https://greedible-backend.vercel.app/api/ingredients/${ingredientId}`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const fetchSuppliers = async () => {
       throw new Error('No staff authentication token found');
     }
 
-  const response = await fetch('https://greedible-backend-staff.vercel.app/api/suppliers', {
+  const response = await fetch('https://greedible-backend.vercel.app/api/suppliers', {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
@@ -101,7 +101,7 @@ export const addIngredient = async (ingredientData) => {
   const token = localStorage.getItem('staffToken');
 
   const response = await fetch(
-    'https://greedible-backend-staff.vercel.app/api/ingredients',
+    'https://greedible-backend.vercel.app/api/ingredients',
     {
       method: 'POST',
       headers: {
