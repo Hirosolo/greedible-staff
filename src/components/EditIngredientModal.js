@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { updateIngredient } from '../api/ingredientApi';
-import toast from 'react-hot-toast';
-import '../styles/EditIngredientModal.css';
+import React, { useState, useEffect } from "react";
+import { updateIngredient } from "../api/ingredientApi";
+import toast from "react-hot-toast";
+import "../styles/EditIngredientModal.css";
 
-const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated }) => {
+const EditIngredientModal = ({
+  show,
+  onClose,
+  ingredient,
+  onIngredientUpdated,
+}) => {
   const [formData, setFormData] = useState({
-    ingredient_name: '',
-    unit: '',
-    minimum_threshold: ''
+    ingredient_name: "",
+    unit: "",
+    minimum_threshold: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -15,13 +20,12 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
   useEffect(() => {
     if (ingredient) {
       setFormData({
-        ingredient_name: ingredient.ingredient_name || '',
-        unit: ingredient.unit || '',
-        minimum_threshold: ingredient.minimum_threshold || ''
+        ingredient_name: ingredient.ingredient_name || "",
+        unit: ingredient.unit || "",
+        minimum_threshold: ingredient.minimum_threshold || "",
       });
     }
   }, [ingredient]);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,19 +42,30 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
       // Include existing quantity and good_for so API receives required fields
       const dataToUpdate = {
         ingredient_name: formData.ingredient_name,
-        quantity: ingredient && typeof ingredient.quantity !== 'undefined' ? Number(ingredient.quantity) : 0,
+        quantity:
+          ingredient && typeof ingredient.quantity !== "undefined"
+            ? Number(ingredient.quantity)
+            : 0,
         unit: formData.unit,
         minimum_threshold: Number(formData.minimum_threshold),
-        good_for: ingredient && typeof ingredient.good_for !== 'undefined' ? Number(ingredient.good_for) : null
+        good_for:
+          ingredient && typeof ingredient.good_for !== "undefined"
+            ? Number(ingredient.good_for)
+            : null,
       };
-      const resp = await updateIngredient(ingredient.ingredient_id, dataToUpdate);
-      toast.success((resp && resp.message) ? resp.message : 'Ingredient updated successfully');
+      const resp = await updateIngredient(
+        ingredient.ingredient_id,
+        dataToUpdate
+      );
+      toast.success(
+        resp && resp.message ? resp.message : "Ingredient updated successfully"
+      );
       onIngredientUpdated(); // Notify parent component to refresh data
       onClose(); // Close modal on success
     } catch (err) {
-      console.error('Error updating ingredient:', err);
-      setError(err.message || 'Failed to update ingredient.');
-      toast.error(err.message || 'Failed to update ingredient.');
+      console.error("Error updating ingredient:", err);
+      setError(err.message || "Failed to update ingredient.");
+      toast.error(err.message || "Failed to update ingredient.");
     } finally {
       setLoading(false);
     }
@@ -100,10 +115,12 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
 
           {error && <div className="error-message">{error}</div>}
 
-          <div className="modal-actions" style={{marginLeft: '0rem'}}>
-            <button type="button" onClick={onClose} disabled={loading}>Cancel</button>
-                        <button type="submit" disabled={loading}>
-              {loading ? 'Saving...' : 'Save Changes'}
+          <div className="modal-actions" style={{ marginLeft: "0rem" }}>
+            <button type="button" onClick={onClose} disabled={loading}>
+              Cancel
+            </button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
@@ -112,4 +129,4 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
   );
 };
 
-export default EditIngredientModal; 
+export default EditIngredientModal;
