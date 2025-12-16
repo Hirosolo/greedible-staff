@@ -276,3 +276,258 @@
     transform: translateY(0);
   }
 }
+/* ===== Weekday Header Row ===== */
+.day-header {
+  text-align: center;
+  font-weight: 600;
+  padding: 10px 0;
+  background-color: #f4f6f8;
+  border-bottom: 2px solid #d0d5dd;
+}
+
+/* Add spacing between header and first week */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 8px;
+}
+
+/* Optional: make header visually distinct from day cells */
+.calendar-grid > .day-header {
+  position: sticky; /* optional, remove if not needed */
+  top: 0;
+  z-index: 2;
+}
+
+/* Day cells remain unchanged */
+.day-cell {
+  height: 180px;        
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 6px;
+}
+
+
+/* Empty padding cells before month start */
+.day-cell.empty {
+  background: transparent;
+  border: none;
+}
+
+.shift-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+/* Each shift slot has fixed height */
+.shift-slot {
+  height: 60px;
+  border: 1px dashed #d0d5dd;
+  border-radius: 6px;
+  padding: 4px;
+  font-size: 12px;
+}
+
+/* Actual shift content */
+.shift-block {
+  height: 100%;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  padding: 4px;
+  background: #eef2ff;
+}
+
+.no-shifts.full-day {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.no-shift-slot {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;          /* red */
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ===== Month / Year Navigation ===== */
+.month-navigation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Select boxes */
+.month-navigation select {
+  appearance: none;              /* remove native arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  padding: 8px 36px 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background-color: #ffffff;
+
+  cursor: pointer;
+  outline: none;
+  min-width: 120px;
+
+  /* custom arrow */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%236b7280' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+/* Hover */
+.month-navigation select:hover {
+  border-color: #6366f1;
+}
+
+/* Focus */
+.month-navigation select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Disabled state */
+.month-navigation select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+/* ===== Create Shift Modal Select ===== */
+.create-shift-modal select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 100%;
+  padding: 8px 36px 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background-color: #ffffff;
+
+  cursor: pointer;
+  outline: none;
+
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%236b7280' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+/* Hover */
+.create-shift-modal select:hover {
+  border-color: #6366f1;
+}
+
+/* Focus */
+.create-shift-modal select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* ===== Create Shift Modal – Date Input ===== */
+.create-shift-modal input[type="date"] {
+  width: 92%;
+  height: 40px;
+
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 15px;
+
+  border-radius: 8px;
+  border: 1px solid #d0d5dd;
+  background-color: #ffffff;
+
+  cursor: pointer;
+  outline: none;
+}
+
+/* Hover */
+.create-shift-modal input[type="date"]:hover {
+  border-color: #6366f1;
+}
+
+/* Focus */
+.create-shift-modal input[type="date"]:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+/* Disabled */
+.create-shift-modal input[type="date"]:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+/* ===== Create Shift Modal – Action Buttons ===== */
+.create-shift-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Base button */
+.create-shift-actions button {
+  min-width: 96px;
+  height: 40px;
+
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+
+  border-radius: 8px;
+  border: none;
+
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Cancel button */
+.create-shift-actions button:first-child {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.create-shift-actions button:first-child:hover {
+  background-color: #e5e7eb;
+}
+
+/* Confirm button */
+.create-shift-actions button:last-child {
+  background-color: #4f46e5;
+  color: #ffffff;
+}
+
+.create-shift-actions button:last-child:hover {
+  background-color: #4338ca;
+}
+
+/* Disabled (loading) */
+.create-shift-actions button:disabled {
+  background-color: #c7d2fe;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
