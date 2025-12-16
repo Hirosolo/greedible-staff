@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import RecipeCard from '../components/RecipeCard';
@@ -164,7 +165,7 @@ const RecipePage = () => {
     if (result.success) {
       console.log('Recipe operation successful:', result.data);
       // Display success notification
-      alert(result.message || 'Recipe saved successfully!');
+      toast.success(result.message || 'Recipe saved successfully!');
 
       // Re-fetch recipes to ensure data consistency after add/edit
       // This is generally more robust than trying to update the state manually

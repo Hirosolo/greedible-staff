@@ -42,7 +42,7 @@
 }
 
 .save-btn {
-  background-color: #ff6b35;
+  background-color: #28b80f;
   color: white;
 }
 
@@ -388,4 +388,45 @@
 
 .ingredient-search-results li.highlighted {
     background-color: #e3f2fd;
+}
+
+.edit-recipe-container.is-saving {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.edit-recipe-container.is-saving .save-btn {
+  pointer-events: none;
+}
+
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #2e7d32;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
