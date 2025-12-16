@@ -240,3 +240,39 @@
 .create-shift-confirm:not(:disabled):hover {
   background: #1766c2;
 }
+.shift-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Success (Green) */
+.shift-notification.success {
+  background-color: #e6f9f0;
+  color: #0f5132;
+  border: 1px solid #badbcc;
+}
+
+/*  Error (Red) */
+.shift-notification.error {
+  background-color: #fdecea;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
