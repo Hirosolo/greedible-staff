@@ -320,7 +320,6 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Supplier</th>
               <th>Stock</th>
               <th>Unit</th>
               <th>Min Threshold</th>
@@ -332,11 +331,13 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
               <tr key={ingredient.ingredient_id}>
                 <td>{ingredient.ingredient_id}</td>
                 <td>{ingredient.ingredient_name}</td>
-                <td>{ingredient.suppliers.join(", ") || "N/A"}</td>
                 <td>{ingredient.quantity}</td>
                 <td>{ingredient.unit}</td>
                 <td>{ingredient.minimum_threshold}</td>
                 <td>
+                  <button onClick={() => handleEditIngredient(ingredient)}>
+                    Edit
+                  </button>
                   <button
                     onClick={() =>
                       handleDeleteIngredient(ingredient.ingredient_id)

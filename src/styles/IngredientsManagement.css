@@ -220,8 +220,8 @@
   background: #fff;
   border-radius: 10px;
   width: 34rem;
-  padding-right: 50px;
-  padding-left: 50px;
+  padding: 24px 24px;
+  box-sizing: border-box;
 }
 
 .modal-card input {
@@ -231,18 +231,16 @@
 }
 
 .modal-actions {
-  width: 34rem;
+  width: 100%;
   display: flex;
   justify-content: flex-end;
-  gap: 1px;
-  padding-bottom: 20px;
-  padding-top: 0;
-  margin-top: 0;
-  padding-right: 0;
+  gap: 8px;
+  padding: 12px 0 20px;
+  box-sizing: border-box;
 }
 
 .modal-actions button {
-  width: 110px;
+  min-width: 110px;
 }
 
 .add-ingredient-btn {

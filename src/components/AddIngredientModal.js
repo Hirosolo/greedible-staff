@@ -83,11 +83,11 @@ const AddIngredientModal = ({ show, onClose, onAdded }) => {
             onChange={handleChange}
           />
 
-          <div className="modal-actions" style={{marginRight:0}}>
-            <button type="button" style={{margin:0}} onClick={onClose}>
+          <div className="modal-actions">
+            <button type="button" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" stype={{margin:0}} disabled={loading}>
+            <button type="submit" disabled={loading}>
               {loading ? 'Adding...' : 'Add'}
             </button>
           </div>
