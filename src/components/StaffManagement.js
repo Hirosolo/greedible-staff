@@ -8,6 +8,9 @@ const StaffManagement = () => {
 
   // modal + form state
   const [showAddModal, setShowAddModal] = useState(false);
+  const [isAdding, setIsAdding] = useState(false); 
+  const [notification, setNotification] = useState(""); 
+
   const [formData, setFormData] = useState({
     staff_name: "",
     staff_email: "",
@@ -26,9 +29,7 @@ const StaffManagement = () => {
       const response = await fetch(
         "https://greedible-backend.vercel.app/api/staff/all",
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
@@ -37,13 +38,8 @@ const StaffManagement = () => {
       }
 
       const data = await response.json();
-      if (data.success && data.staff) {
-        setStaff(data.staff);
-      } else {
-        setStaff([]);
-      }
+      setStaff(data.success ? data.staff : []);
     } catch (err) {
-      console.error(err);
       setError("Failed to load staff data.");
     } finally {
       setLoading(false);
@@ -62,17 +58,20 @@ const StaffManagement = () => {
 
   const handleAddStaff = async (e) => {
     e.preventDefault();
-  
+    if (isAdding) return; // prevent double click
+
+    setIsAdding(true);
+
     try {
-      const token = localStorage.getItem('staffToken');
-      if (!token) throw new Error('No staff authentication token found');
-  
+      const token = localStorage.getItem("staffToken");
+      if (!token) throw new Error("No staff authentication token found");
+
       const response = await fetch(
-        'https://greedible-backend.vercel.app/api/staff',
+        "https://greedible-backend.vercel.app/api/staff",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -81,49 +80,57 @@ const StaffManagement = () => {
           }),
         }
       );
-  
-      const text = await response.text();
-      const data = text ? JSON.parse(text) : null;
-  
-      if (!response.ok) {
-        throw new Error(data?.message || 'Failed to add staff');
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || "Failed to add staff");
       }
-  
-      if (!data?.success) {
-        throw new Error('Staff creation failed');
-      }
-  
-      // update UI immediately
+
+      // update UI
       setStaff((prev) => [...prev, data.data]);
-  
       setShowAddModal(false);
+
       setFormData({
-        staff_name: '',
-        staff_email: '',
-        password: '',
-        role: '',
-        phone: '',
-        pay_rates: '',
+        staff_name: "",
+        staff_email: "",
+        password: "",
+        role: "",
+        phone: "",
+        pay_rates: "",
       });
+
+      // show notification
+      setNotification("Staff added successfully!");
+      setTimeout(() => setNotification(""), 3000);
+
     } catch (err) {
-      console.error('Add staff error:', err);
       alert(err.message);
+    } finally {
+      setIsAdding(false);
     }
   };
-  
 
-  if (loading)
-    return <div className="loading-message">Loading staff data...</div>;
+  if (loading) return <div className="loading-message">Loading staff data...</div>;
   if (error) return <div className="error-message">{error}</div>;
 
   return (
     <div className="staff-management-container">
       <div className="staff-header">
         <h2>Staff Management</h2>
-        <button className="add-staff-btn" style={{backgroundColor:'#6B994E'}} onClick={() => setShowAddModal(true)}>
+        <button
+          className="add-staff-btn"
+          style={{ backgroundColor: "#6B994E" }}
+          onClick={() => setShowAddModal(true)}
+        >
           + Add New Staff
         </button>
       </div>
+
+      {/* Notification */}
+      {notification && (
+        <div className="success-notification">{notification}</div>
+      )}
 
       <table className="staff-table">
         <thead>
@@ -148,81 +155,35 @@ const StaffManagement = () => {
         </tbody>
       </table>
 
-      {staff.length === 0 && (
-        <div className="no-results">No staff members available.</div>
-      )}
-
-      {/* ================= ADD STAFF MODAL ================= */}
       {showAddModal && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>Add New Staff</h3>
 
             <form onSubmit={handleAddStaff} className="staff-form">
-              <input
-                name="staff_name"
-                placeholder="Staff Name"
-                value={formData.staff_name}
-                onChange={handleInputChange}
-                required
-              />
-
-              <input
-                name="staff_email"
-                type="email"
-                placeholder="Email"
-                value={formData.staff_email}
-                onChange={handleInputChange}
-                required
-              />
-
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-              />
-
-              <input
-                name="role"
-                placeholder="Role (Chef, Admin, Staff...)"
-                value={formData.role}
-                onChange={handleInputChange}
-                required
-              />
-
-              <input
-                name="phone"
-                placeholder="Phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-              />
-
-              <input
-                name="pay_rates"
-                type="number"
-                step="0.01"
-                placeholder="Pay Rate"
-                value={formData.pay_rates}
-                onChange={handleInputChange}
-                required
-              />
+              <input name="staff_name" placeholder="Staff Name" value={formData.staff_name} onChange={handleInputChange} required />
+              <input name="staff_email" type="email" placeholder="Email" value={formData.staff_email} onChange={handleInputChange} required />
+              <input name="password" type="password" placeholder="Password" value={formData.password} onChange={handleInputChange} required />
+              <input name="role" placeholder="Role" value={formData.role} onChange={handleInputChange} required />
+              <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleInputChange} />
+              <input name="pay_rates" type="number" step="0.01" placeholder="Pay Rate" value={formData.pay_rates} onChange={handleInputChange} required />
 
               <div className="modal-actions">
                 <button
                   type="submit"
                   className="save-btn"
                   style={{ backgroundColor: "#6B994E" }}
+                  disabled={isAdding}
                 >
-                  Save
+                  {isAdding ? "Adding..." : "Add"}
                 </button>
+
                 <button
                   type="button"
                   className="cancel-btn"
-                  style={{ backgroundColor: "#6C757D", color:'white' }}
+                  style={{ backgroundColor: "#6C757D", color: "white" }}
                   onClick={() => setShowAddModal(false)}
+                  disabled={isAdding}
                 >
                   Cancel
                 </button>
