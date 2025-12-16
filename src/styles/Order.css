@@ -211,6 +211,14 @@
   text-align: left;
 }
 
+/* Fixed width for the Action column */
+.orders-table th:last-child,
+.orders-table td:last-child {
+  width: 120px;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .orders-table th {
   background-color: #3A7D44; /* Dark green background for header */
   color: #F8F5E9; /* Light text color */
@@ -224,4 +232,36 @@
 .orders-table tbody tr:hover {
   background-color: #DF6D14; /* Amber background on hover */
   color: #F8F5E9; /* Light text color on hover */
+}
+
+/* Action button for advancing order status */
+.order-action-button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: #f97316; /* Orange */
+  color: #ffffff;
+  transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  white-space: nowrap;
+}
+
+.order-action-button:hover {
+  background-color: #ea580c;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.order-action-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.order-action-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }

@@ -5,6 +5,7 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
   useEffect(() => {
     if (allOrdersData) {
@@ -85,6 +86,52 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders }) => {
     return date.toLocaleDateString('en-GB', options).replace(',', '') + ' ' + date.toLocaleTimeString('en-GB', options);
   };
 
+  // Determine the next status in the workflow
+  const getNextStatus = (currentStatus) => {
+    const flow = ['Confirmed', 'Preparing', 'Ready', 'Delivering', 'Completed'];
+    const index = flow.indexOf(currentStatus);
+    if (index === -1 || index === flow.length - 1) return null; // Unknown or already Completed
+    return flow[index + 1];
+  };
+
+  // Handle advancing order status
+  const handleAdvanceStatus = async (orderId) => {
+    try {
+      setUpdatingOrderId(orderId);
+
+      const token = localStorage.getItem('staffToken');
+      if (!token) {
+        console.error('No staff authentication token found');
+        return;
+      }
+
+      const response = await fetch('https://greedible-backend.vercel.app/api/orders/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ orderId }),
+      });
+
+      const data = await response.json();
+      console.log('Update order status response:', data);
+
+      if (data && data.status) {
+        // Update status locally so UI reflects latest state
+        setFilteredOrders((prev) =>
+          prev.map((order) =>
+            order.order_id === orderId ? { ...order, status: data.status } : order
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    } finally {
+      setUpdatingOrderId(null);
+    }
+  };
+
   return (
     <div className="order-container">
       {/* Header */}
@@ -118,6 +165,7 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders }) => {
                 <th onClick={() => handleSort('totalPrice')} style={{cursor: 'pointer'}}>
                   Total Price {sortConfig.key === 'totalPrice' ? (sortConfig.direction === 'asc' ? '▲' : '▼') : ''}
                 </th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -135,6 +183,21 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders }) => {
                   <td>{order.phone}</td>
                   <td>{order.delivery_address}</td>
                   <td>{getTotalPrice(order).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                  <td>
+                    {(() => {
+                      const nextStatus = getNextStatus(order.status);
+                      if (!nextStatus) return null;
+                      return (
+                        <button
+                          className="order-action-button"
+                          onClick={() => handleAdvanceStatus(order.order_id)}
+                          disabled={updatingOrderId === order.order_id}
+                        >
+                          {updatingOrderId === order.order_id ? 'Updating...' : nextStatus}
+                        </button>
+                      );
+                    })()}
+                  </td>
                 </tr>
               ))}
             </tbody>
