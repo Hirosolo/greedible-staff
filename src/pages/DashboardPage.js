@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
@@ -23,6 +23,42 @@ const DashboardPage = () => {
   const [isLoadingWaste, setIsLoadingWaste] = useState(false); // Loading state for waste data
   const [allIngredients, setAllIngredients] = useState([]); // New state for all ingredients
   const [isLoadingIngredients, setIsLoadingIngredients] = useState(false); // Loading state for ingredients
+
+  // Fetch all orders data (used on initial load of Order tab and for manual refresh)
+  const fetchAllOrdersData = useCallback(async () => {
+    setIsLoadingAllOrders(true);
+    try {
+      console.log('Fetching all orders data...');
+      const token = localStorage.getItem('staffToken'); // Assuming staff token is needed
+      if (!token) {
+          throw new Error('No staff authentication token found');
+      }
+
+      const response = await fetch(`https://greedible-backend.vercel.app/api/orders`, {
+           headers: {
+              'Authorization': `Bearer ${token}` // Include the token in the headers
+          }
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('All orders data fetched:', data);
+
+      if (data.success && data.orders) { 
+        setAllOrdersData(data.orders);
+      } else {
+        setAllOrdersData([]); 
+      }
+
+    } catch (error) {
+      console.error('Error fetching all orders data:', error);
+      setAllOrdersData([]); 
+    } finally {
+      setIsLoadingAllOrders(false);
+    }
+  }, []);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -201,46 +237,10 @@ const DashboardPage = () => {
 
   // Effect to fetch all orders data when the Order tab is active
   useEffect(() => {
-    const fetchAllOrdersData = async () => {
-      if (activeTab === 'Order') {
-        setIsLoadingAllOrders(true);
-        try {
-          console.log('Fetching all orders data...');
-          const token = localStorage.getItem('staffToken'); // Assuming staff token is needed
-          if (!token) {
-              throw new Error('No staff authentication token found');
-          }
-
-          const response = await fetch(`https://greedible-backend.vercel.app/api/orders`, {
-               headers: {
-                  'Authorization': `Bearer ${token}` // Include the token in the headers
-              }
-          });
-
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const data = await response.json();
-          console.log('All orders data fetched:', data);
-
-          if (data.success && data.orders) { 
-            setAllOrdersData(data.orders);
-          } else {
-            setAllOrdersData([]); 
-          }
-
-        } catch (error) {
-          console.error('Error fetching all orders data:', error);
-          setAllOrdersData([]); 
-        } finally {
-          setIsLoadingAllOrders(false);
-        }
-      }
-    };
-
-    fetchAllOrdersData();
-
-  }, [activeTab]); // Depend on activeTab
+    if (activeTab === 'Order') {
+      fetchAllOrdersData();
+    }
+  }, [activeTab, fetchAllOrdersData]); // Depend on activeTab and fetchAllOrdersData
 
   // Effect to fetch waste data when the Ingredients tab is active
   useEffect(() => {
@@ -401,7 +401,14 @@ const DashboardPage = () => {
                   employeeData={employeeData} // Pass employee data here too, as it's always fetched
                 />;
       case 'Order':
-        return <Order {...commonProps} allOrdersData={allOrdersData} isLoadingAllOrders={isLoadingAllOrders} />;
+        return (
+          <Order
+            {...commonProps}
+            allOrdersData={allOrdersData}
+            isLoadingAllOrders={isLoadingAllOrders}
+            onRefreshOrders={fetchAllOrdersData}
+          />
+        );
       case 'Ingredients':
         return <Ingredients 
                   {...commonProps} 

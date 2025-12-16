@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Order.css';
 
-const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders }) => {
+const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders, onRefreshOrders }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
@@ -138,7 +138,16 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders }) => {
       
       {/* Order Table */}
       <div className="order-table-container">{/* Add a container for styling */}
-        <h2>All Orders</h2>
+        <div className="order-table-header">
+          <h2>All Orders</h2>
+          <button
+            className="order-refresh-button"
+            onClick={onRefreshOrders}
+            disabled={isLoadingAllOrders}
+          >
+            {isLoadingAllOrders ? 'Refreshing...' : 'Refresh'}
+          </button>
+        </div>
         <div className="order-search-bar">
           <input
             type="text"
