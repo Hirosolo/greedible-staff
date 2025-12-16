@@ -4,6 +4,14 @@
   min-height: calc(100vh - 140px);
 }
 
+.ingredients-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
 .search-container {
   margin-bottom: 20px;
 }
@@ -196,3 +204,53 @@
   background-color: #c82333;
   border-color: #bd2130;
 }
+
+/* AddIngredientModal.css */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 10px;
+  width: 34rem;
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
+.modal-card input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.modal-actions {
+  width: 34rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1px;
+  padding-bottom: 20px;
+  padding-top: 0;
+  margin-top: 0;
+  padding-right: 0;
+}
+
+.modal-actions button {
+  width: 110px;
+}
+
+.add-ingredient-btn {
+  background: #28a745;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+

@@ -96,3 +96,26 @@ export const fetchSuppliers = async () => {
     throw new Error('Unexpected data format from suppliers API');
   }
 }; 
+
+export const addIngredient = async (ingredientData) => {
+  const token = localStorage.getItem('staffToken');
+
+  const response = await fetch(
+    'https://greedible-backend-staff.vercel.app/api/ingredients',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(ingredientData),
+    }
+  );
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.message || 'Failed to add ingredient');
+  }
+
+  return response.json();
+};
