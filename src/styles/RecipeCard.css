@@ -192,3 +192,20 @@
 .recipe-card {
   animation: fadeInUp 0.3s ease-out;
 }
+
+.discontinue-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #6B7280;
+  color: white;
+}
+
+.discontinue-btn:hover {
+  background-color: #4B5563;
+  transform: translateY(-1px);
+}

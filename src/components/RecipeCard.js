@@ -9,7 +9,8 @@ const RecipeCard = ({
     price: '26.10$'
   },
   onEdit,
-  onDelete 
+  onDelete,
+  onDiscontinue
 }) => {
   const [imageError, setImageError] = useState(false);
 
@@ -22,6 +23,12 @@ const RecipeCard = ({
   const handleDelete = () => {
     if (onDelete) {
       onDelete(recipe);
+    }
+  };
+
+  const handleDiscontinue = () => {
+    if (onDiscontinue) {
+      onDiscontinue(recipe);
     }
   };
 
@@ -71,6 +78,14 @@ const RecipeCard = ({
           >
             Delete Recipe
           </button>
+          {recipe && recipe.status !== 'unavailable' && (
+            <button
+              className="discontinue-btn"
+              onClick={handleDiscontinue}
+            >
+              Discontinue
+            </button>
+          )}
         </div>
       </div>
     </div>

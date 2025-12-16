@@ -126,6 +126,42 @@ const RecipePage = () => {
     setShowDeleteModal(true);
   };
 
+  const handleDiscontinue = async (recipe) => {
+    if (!recipe || !recipe.id) {
+      setError('Cannot discontinue: Missing recipe information.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('https://greedible-backend.vercel.app/api/recipes/discontinute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipe_id: recipe.id })
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to discontinue recipe');
+      }
+
+      const result = await response.json().catch(() => ({}));
+      toast.success(result.message || 'Recipe discontinued successfully');
+
+      // Refresh list
+      await fetchRecipes();
+
+    } catch (err) {
+      console.error('Error discontinuing recipe:', err);
+      toast.error(err.message || 'Failed to discontinue recipe');
+      setError(err.message || 'Failed to discontinue recipe');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleConfirmDelete = async (deletedRecipeId) => { // Accept deleted recipe ID from DeleteRecipe
     setLoading(true); // Indicate loading while processing (will be set to false in finally block)
     setError(null); // Clear previous errors
@@ -265,6 +301,7 @@ const RecipePage = () => {
                 recipe={recipe}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                onDiscontinue={handleDiscontinue}
               />
             ))}
           </div>
