@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchIngredients, deleteIngredient } from "../api/ingredientApi"; // Corrected import path
+import { fetchIngredients } from "../api/ingredientApi"; // Corrected import path
 import EditIngredientModal from "./EditIngredientModal"; // Import the new modal component
 import "../styles/IngredientsManagement.css";
 import AddIngredientModal from "./AddIngredientModal";
+import DeleteIngredientModal from "./DeleteIngredientModal";
 
 const IngredientsManagement = ({ onAddIngredientClick }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,6 +12,8 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false); // State to control modal visibility
   const [ingredientToEdit, setIngredientToEdit] = useState(null); // State to hold ingredient data for editing
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [ingredientToDelete, setIngredientToDelete] = useState(null);
   const [latestRestockDates, setLatestRestockDates] = useState({}); // New state for latest restock dates
   const [loadingRestockDates, setLoadingRestockDates] = useState({}); // Loading state for restock dates
   const [showAddModal, setShowAddModal] = useState(false);
@@ -203,26 +206,24 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
     }
   };
 
-  const handleDeleteIngredient = async (ingredientId) => {
-    // TODO: Implement a more robust confirmation modal later
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this ingredient?"
-    );
+  const handleDeleteIngredient = (ingredientId, ingredientName) => {
+    // Open confirmation modal
+    setIngredientToDelete({ ingredient_id: ingredientId, ingredient_name: ingredientName });
+    setShowDeleteModal(true);
+  };
 
-    if (isConfirmed) {
-      try {
-        await deleteIngredient(ingredientId);
-        // Remove the deleted ingredient from the state
-        setIngredients(
-          ingredients.filter(
-            (ingredient) => ingredient.ingredient_id !== ingredientId
-          )
-        );
-      } catch (err) {
-        console.error("Failed to delete ingredient:", err);
-        alert("Failed to delete ingredient."); // TODO: More user-friendly error handling
-      }
-    }
+  const handleConfirmDelete = (ingredientId) => {
+    // Remove the deleted ingredient from the state
+    setIngredients(
+      ingredients.filter((ingredient) => ingredient.ingredient_id !== ingredientId)
+    );
+    setShowDeleteModal(false);
+    setIngredientToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setIngredientToDelete(null);
   };
 
   const handleEditIngredient = (ingredient) => {
@@ -340,7 +341,7 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
                   </button>
                   <button
                     onClick={() =>
-                      handleDeleteIngredient(ingredient.ingredient_id)
+                      handleDeleteIngredient(ingredient.ingredient_id, ingredient.ingredient_name)
                     }
                   >
                     Delete
@@ -376,6 +377,18 @@ const IngredientsManagement = ({ onAddIngredientClick }) => {
         onClose={() => setShowAddModal(false)}
         onAdded={loadIngredients}
       />
+      {showDeleteModal && ingredientToDelete && (
+        <div className="modal-backdrop">
+          <div className="modal-card">
+            <DeleteIngredientModal
+              ingredientId={ingredientToDelete.ingredient_id}
+              ingredientName={ingredientToDelete.ingredient_name}
+              onDeleteSuccess={handleConfirmDelete}
+              onCancel={handleCancelDelete}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
