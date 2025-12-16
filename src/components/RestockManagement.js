@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/RestockManagement.css';
+import React, { useState, useEffect } from "react";
+import "../styles/RestockManagement.css";
+import { FaInfoCircle } from "react-icons/fa";
 
 const RestockManagement = ({ onViewDetails }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [restockOrders, setRestockOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,25 +11,28 @@ const RestockManagement = ({ onViewDetails }) => {
   useEffect(() => {
     const fetchRestockOrders = async () => {
       try {
-        const token = localStorage.getItem('staffToken');
+        const token = localStorage.getItem("staffToken");
         if (!token) {
-          throw new Error('No staff authentication token found');
+          throw new Error("No staff authentication token found");
         }
 
-        const response = await fetch('https://greedible-backend-staff.vercel.app/api/restock', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "https://greedible-backend-staff.vercel.app/api/restock",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (!response.ok) {
-          throw new Error('Failed to fetch restock orders');
+          throw new Error("Failed to fetch restock orders");
         }
         const data = await response.json();
-        console.log('Fetched restock orders data:', data);
+        console.log("Fetched restock orders data:", data);
         setRestockOrders(data.restocks);
       } catch (err) {
-        console.error('Error fetching restock orders:', err);
-        setError('Failed to load restock orders.');
+        console.error("Error fetching restock orders:", err);
+        setError("Failed to load restock orders.");
       } finally {
         setLoading(false);
       }
@@ -36,10 +40,12 @@ const RestockManagement = ({ onViewDetails }) => {
 
     fetchRestockOrders();
   }, []);
-  
-  const filteredOrders = restockOrders.filter(order =>
-    order.supplier_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (order.restock_date && new Date(order.restock_date).toLocaleDateString().includes(searchTerm))
+
+  const filteredOrders = restockOrders.filter(
+    (order) =>
+      order.supplier_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (order.restock_date &&
+        new Date(order.restock_date).toLocaleDateString().includes(searchTerm))
   );
 
   const handleViewDetails = (order) => {
@@ -88,12 +94,13 @@ const RestockManagement = ({ onViewDetails }) => {
                 <td>{new Date(order.restock_date).toLocaleDateString()}</td>
                 <td>{order.supplier_name}</td>
                 <td>
-                  <button 
+                  <button
                     className="view-details-btn"
+                    style={{color:'white'}}
                     onClick={() => handleViewDetails(order)}
                     title="View Details"
                   >
-                    👁️
+                    View
                   </button>
                 </td>
               </tr>
@@ -108,10 +115,8 @@ const RestockManagement = ({ onViewDetails }) => {
         </div>
       )}
       {filteredOrders.length === 0 && !searchTerm && !loading && !error && (
-         <div className="no-results">
-           No restock orders available.
-         </div>
-       )}
+        <div className="no-results">No restock orders available.</div>
+      )}
     </div>
   );
 };

@@ -93,24 +93,30 @@
 }
 
 .view-details-btn {
-  background-color: #F59E0B;
+  padding: 6px 14px;
+  border-radius: 8px;        /* rounded rectangle */
   border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+  background-color: #F59E0B; /* blue (change if needed) */
+  color: white;
   font-size: 14px;
-  transition: all 0.2s ease;
-  margin: 0 auto; /* Additional centering for the button itself */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .view-details-btn:hover {
-  background-color: #D97706;
-  transform: scale(1.1);
+  background-color: #1d4ed8;
 }
+
+.view-details-btn:active {
+  transform: scale(0.96);
+}
+
+.view-details-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
 
 .table-row:hover {
   background-color: #F9FAFB;
