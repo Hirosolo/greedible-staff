@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { fetchIngredients, updateIngredient, fetchSuppliers } from '../api/ingredientApi'; // Added updateIngredient and fetchSuppliers
+import { updateIngredient } from '../api/ingredientApi';
+import toast from 'react-hot-toast';
 import '../styles/EditIngredientModal.css'; // Assuming a new CSS file for the modal
 
 const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated }) => {
@@ -42,12 +43,14 @@ const EditIngredientModal = ({ show, onClose, ingredient, onIngredientUpdated })
         minimum_threshold: Number(formData.minimum_threshold),
         good_for: ingredient && typeof ingredient.good_for !== 'undefined' ? Number(ingredient.good_for) : null
       };
-      await updateIngredient(ingredient.ingredient_id, dataToUpdate);
+      const resp = await updateIngredient(ingredient.ingredient_id, dataToUpdate);
+      toast.success((resp && resp.message) ? resp.message : 'Ingredient updated successfully');
       onIngredientUpdated(); // Notify parent component to refresh data
       onClose(); // Close modal on success
     } catch (err) {
       console.error('Error updating ingredient:', err);
       setError(err.message || 'Failed to update ingredient.');
+      toast.error(err.message || 'Failed to update ingredient.');
     } finally {
       setLoading(false);
     }

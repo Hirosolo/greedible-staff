@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { addIngredient } from '../api/ingredientApi';
+import toast from 'react-hot-toast';
 import "../styles/IngredientsManagement.css";
 
 const AddIngredientModal = ({ show, onClose, onAdded }) => {
@@ -27,16 +28,21 @@ const AddIngredientModal = ({ show, onClose, onAdded }) => {
     e.preventDefault();
     try {
       setLoading(true);
-      await addIngredient({
+      const result = await addIngredient({
         ...formData,
         quantity: Number(formData.quantity),
         minimum_threshold: Number(formData.minimum_threshold),
         good_for: Number(formData.good_for),
       });
+
+      toast.success((result && result.message) ? result.message : 'Ingredient added successfully');
+
       onAdded(); // refresh list
       onClose();
     } catch (err) {
-      setError(err.message);
+      console.error('Error adding ingredient:', err);
+      setError(err.message || 'Failed to add ingredient');
+      toast.error(err.message || 'Failed to add ingredient');
     } finally {
       setLoading(false);
     }
