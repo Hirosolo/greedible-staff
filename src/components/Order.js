@@ -88,6 +88,14 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders, onRefreshOrders
 
   // Determine the next status in the workflow
   const getNextStatus = (currentStatus) => {
+    if (!currentStatus) return null;
+
+    const normalized = currentStatus.toLowerCase();
+    // Do not show button if order is cancelled
+    if (normalized === 'cancel' || normalized === 'cancelled' || normalized === 'canceled') {
+      return null;
+    }
+
     const flow = ['Confirmed', 'Preparing', 'Ready', 'Delivering', 'Completed'];
     const index = flow.indexOf(currentStatus);
     if (index === -1 || index === flow.length - 1) return null; // Unknown or already Completed
@@ -129,6 +137,18 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders, onRefreshOrders
       console.error('Error updating order status:', error);
     } finally {
       setUpdatingOrderId(null);
+    }
+  };
+
+  // When clicking action button: refresh data first, then advance status
+  const handleActionClick = async (orderId) => {
+    try {
+      if (onRefreshOrders) {
+        await onRefreshOrders();
+      }
+      await handleAdvanceStatus(orderId);
+    } catch (error) {
+      console.error('Error handling action click:', error);
     }
   };
 
@@ -199,7 +219,7 @@ const Order = ({ onTabChange, allOrdersData, isLoadingAllOrders, onRefreshOrders
                       return (
                         <button
                           className="order-action-button"
-                          onClick={() => handleAdvanceStatus(order.order_id)}
+                          onClick={() => handleActionClick(order.order_id)}
                           disabled={updatingOrderId === order.order_id}
                         >
                           {updatingOrderId === order.order_id ? 'Updating...' : nextStatus}
