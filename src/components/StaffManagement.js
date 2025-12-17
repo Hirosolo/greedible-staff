@@ -9,6 +9,8 @@ const StaffManagement = () => {
   // modal + form state
   const [showAddModal, setShowAddModal] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [notification, setNotification] = useState({
     message: "",
     type: "", // 'success' | 'error'
@@ -18,6 +20,15 @@ const StaffManagement = () => {
   const [selectedStaff, setSelectedStaff] = useState(null);
 
   const [formData, setFormData] = useState({
+    staff_name: "",
+    staff_email: "",
+    password: "",
+    role: "",
+    phone: "",
+    pay_rates: "",
+  });
+  const [editFormData, setEditFormData] = useState({
+    staff_id: null,
     staff_name: "",
     staff_email: "",
     password: "",
@@ -66,6 +77,85 @@ const StaffManagement = () => {
   const isValidPhone = (phone) => {
     const phoneRegex = /^0\d{9}$/; // starts with 0, total 10 digits
     return phoneRegex.test(phone);
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveEditStaff = async (e) => {
+    e.preventDefault();
+    if (isEditing) return;
+
+    setIsEditing(true);
+
+    const phoneToCheck = (editFormData.phone || "").trim();
+    if (phoneToCheck && !isValidPhone(phoneToCheck)) {
+      setNotification({
+        message: "Phone number must start with 0 and contain exactly 10 digits.",
+        type: "error",
+      });
+      setTimeout(() => setNotification({ message: "", type: "" }), 4000);
+      setIsEditing(false);
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("staffToken");
+      if (!token) throw new Error("No staff authentication token found");
+
+      const payload = {
+        id: editFormData.staff_id,
+        staff_name: editFormData.staff_name,
+        staff_email: editFormData.staff_email,
+        password: editFormData.password,
+        role: editFormData.role,
+        phone: editFormData.phone,
+        pay_rates: Number(editFormData.pay_rates),
+      };
+
+      const response = await fetch(
+        "https://greedible-backend.vercel.app/api/staff",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || "Failed to update staff");
+      }
+
+      // Update UI: prefer server returned updated staff if available
+      const updated = data.data || {
+        staff_id: editFormData.staff_id,
+        staff_name: editFormData.staff_name,
+        staff_email: editFormData.staff_email,
+        role: editFormData.role,
+        phone: editFormData.phone,
+        pay_rates: Number(editFormData.pay_rates),
+      };
+
+      setStaff((prev) => prev.map((s) => (s.staff_id === updated.staff_id ? { ...s, ...updated } : s)));
+
+      setNotification({ message: "Staff updated successfully!", type: "success" });
+      setTimeout(() => setNotification({ message: "", type: "" }), 3000);
+
+      setShowEditModal(false);
+      setSelectedStaff(null);
+    } catch (err) {
+      setNotification({ message: err.message || "Failed to update staff.", type: "error" });
+      setTimeout(() => setNotification({ message: "", type: "" }), 4000);
+    } finally {
+      setIsEditing(false);
+    }
   };
 
   const handleAddStaff = async (e) => {
@@ -314,6 +404,32 @@ const StaffManagement = () => {
               <td>{member.phone}</td>
               <td>
                 <button
+                  className="edit-btn"
+                  onClick={() => {
+                    setSelectedStaff(member);
+                    setEditFormData({
+                      staff_id: member.staff_id,
+                      staff_name: member.staff_name || "",
+                      staff_email: member.staff_email || "",
+                      password: "",
+                      role: member.role || "",
+                      phone: member.phone || "",
+                      pay_rates: member.pay_rates || "",
+                    });
+                    setShowEditModal(true);
+                  }}
+                  style={{
+                    backgroundColor: "#0d6efd",
+                    color: "white",
+                    padding: "6px 10px",
+                    borderRadius: "6px",
+                    marginRight: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Edit
+                </button>
+                <button
                   className="delete-btn"
                   onClick={() => {
                     setSelectedStaff(member);
@@ -407,6 +523,92 @@ const StaffManagement = () => {
                   style={{ backgroundColor: "#6C757D", color: "white" }}
                   onClick={() => setShowAddModal(false)}
                   disabled={isAdding}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showEditModal && selectedStaff && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Edit Staff</h3>
+
+            <form onSubmit={handleSaveEditStaff} className="staff-form">
+              <input
+                name="staff_id"
+                placeholder="ID"
+                value={editFormData.staff_id || ""}
+                onChange={handleEditInputChange}
+                disabled
+              />
+              <input
+                name="staff_name"
+                placeholder="Staff Name"
+                value={editFormData.staff_name}
+                onChange={handleEditInputChange}
+                required
+              />
+              <input
+                name="staff_email"
+                type="email"
+                placeholder="Email"
+                value={editFormData.staff_email}
+                onChange={handleEditInputChange}
+                required
+              />
+              <input
+                name="password"
+                type="password"
+                placeholder="Password (leave blank to keep current)"
+                value={editFormData.password}
+                onChange={handleEditInputChange}
+              />
+              <input
+                name="role"
+                placeholder="Role"
+                value={editFormData.role}
+                onChange={handleEditInputChange}
+                required
+              />
+              <input
+                name="phone"
+                placeholder="Phone"
+                value={editFormData.phone}
+                onChange={handleEditInputChange}
+              />
+              <input
+                name="pay_rates"
+                type="number"
+                step="0.01"
+                placeholder="Pay Rate"
+                value={editFormData.pay_rates}
+                onChange={handleEditInputChange}
+                required
+              />
+
+              <div className="modal-actions" style={{marginLeft:'0rem'}}>
+                <button
+                  type="submit"
+                  className="save-btn"
+                  style={{ backgroundColor: "#0d6efd", color: "white" }}
+                  disabled={isEditing}
+                >
+                  {isEditing ? "Saving..." : "Save"}
+                </button>
+
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  style={{ backgroundColor: "#6C757D", color: "white" }}
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setSelectedStaff(null);
+                  }}
+                  disabled={isEditing}
                 >
                   Cancel
                 </button>
