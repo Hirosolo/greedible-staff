@@ -10,7 +10,8 @@ const RecipeCard = ({
   },
   onEdit,
   onDelete,
-  onDiscontinue
+  onDiscontinue,
+  onActivate
 }) => {
   const [imageError, setImageError] = useState(false);
 
@@ -78,12 +79,19 @@ const RecipeCard = ({
           >
             Delete Recipe
           </button>
-          {recipe && recipe.status !== 'unavailable' && (
+          {recipe && recipe.status !== 'unavailable' ? (
             <button
               className="discontinue-btn"
               onClick={handleDiscontinue}
             >
-              Discontinue
+              Disable
+            </button>
+          ) : (
+            <button
+              className="activate-btn"
+              onClick={() => onActivate && onActivate(recipe)}
+            >
+              Activate
             </button>
           )}
         </div>

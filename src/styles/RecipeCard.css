@@ -209,3 +209,20 @@
   background-color: #4B5563;
   transform: translateY(-1px);
 }
+
+.activate-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #10B981;
+  color: white;
+}
+
+.activate-btn:hover {
+  background-color: #059669;
+  transform: translateY(-1px);
+}

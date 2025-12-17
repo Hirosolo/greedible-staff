@@ -162,6 +162,42 @@ const RecipePage = () => {
     }
   };
 
+  const handleActivate = async (recipe) => {
+    if (!recipe || !recipe.id) {
+      setError('Cannot activate: Missing recipe information.');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('https://greedible-backend.vercel.app/api/recipes/active', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipe_id: recipe.id })
+      });
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to activate recipe');
+      }
+
+      const result = await response.json().catch(() => ({}));
+      toast.success(result.message || 'Recipe activated successfully');
+
+      // Refresh list
+      await fetchRecipes();
+
+    } catch (err) {
+      console.error('Error activating recipe:', err);
+      toast.error(err.message || 'Failed to activate recipe');
+      setError(err.message || 'Failed to activate recipe');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleConfirmDelete = async (deletedRecipeId) => { // Accept deleted recipe ID from DeleteRecipe
     setLoading(true); // Indicate loading while processing (will be set to false in finally block)
     setError(null); // Clear previous errors
@@ -301,7 +337,8 @@ const RecipePage = () => {
                 recipe={recipe}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-                onDiscontinue={handleDiscontinue}
+                  onDiscontinue={handleDiscontinue}
+                  onActivate={handleActivate}
               />
             ))}
           </div>
