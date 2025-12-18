@@ -507,7 +507,7 @@ const StaffManagement = () => {
                 required
               />
 
-              <div className="modal-actions">
+              <div className="modal-actions" style={{marginLeft:'0rem'}}>
                 <button
                   type="submit"
                   className="save-btn"
