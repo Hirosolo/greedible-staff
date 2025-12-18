@@ -41,9 +41,9 @@ const RecipeCard = ({
     <div className="recipe-card">
       {/* Recipe Image */}
       <div className="recipe-image-container">
-        {!imageError ? (
+        {!imageError && (recipe.Image || recipe.image) ? (
           <img 
-            src={`https://greedible-backend.vercel.app${recipe.image}`} 
+            src={recipe.Image || recipe.image} 
             alt={recipe.name}
             className="recipe-image"
             onError={handleImageError}
